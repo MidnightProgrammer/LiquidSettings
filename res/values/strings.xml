@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="app_name">Liquid settings</string>
+<string name="vibrON">Vibrate on</string>
+<string name="vibrOFF">Vibrate off</string>
+
+<string name="sens">sensitivity</string>
+<string name="noise">noise</string>
+<string name="set">set</string>
+<string name="noiseval">75</string>
+<string name="sensitivityval">75</string>
+</resources>
