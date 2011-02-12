@@ -14,15 +14,16 @@ public class LiquidSettings {
         int n = command.length;
         boolean right=false;
         //Check if the last command string == "echo $?"
-        if (!command[n-1].equals("echo $?")){
+        if (!command[n-1].equals("echo $?"))
         	++n;
-        } else { right=true;}
+        else 
+                right=true;
         String [] cmd= new String[n+1];
         cmd[0]="su";
         for(int i=1;i<n;i++) cmd[i]=command[i-1];
         if (!right)
         	cmd[n]="echo $?";
-		try {
+	try {
         	Process proc= Runtime.getRuntime().exec(cmd);
         	BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
         	String reply=in.readLine();
