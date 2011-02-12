@@ -10,6 +10,21 @@ public class LiquidSettings {
 		return runRootCommand("echo $?");
 	}
 	
+	//DEBUG FUNCTION
+	public static String debugf(){
+		String [] cmd = {"su","echo $1"};
+		try{
+        	Process proc= Runtime.getRuntime().exec(cmd);
+        	BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+        	String reply=in.readLine(); //THE BUG IS HERE
+        	in.close();
+        	return reply;
+		} catch (Exception e){
+		}
+		return null;
+	}
+	
+	
 	public static boolean runRootCommand(String ... command) {
         int n = command.length;
         boolean right=false;
@@ -28,6 +43,7 @@ public class LiquidSettings {
         	BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
         	String reply=in.readLine();
         	in.close();
+        	System.out.println("[DEBUG] " + reply +"\n");
         	proc=null;
         	//If terminal replies 0 the root is available
         	if (!reply.equals("0")) return false;

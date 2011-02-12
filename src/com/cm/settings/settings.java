@@ -36,8 +36,6 @@ public class settings extends Activity implements OnClickListener {
         vibrate.setChecked(vibrstatus);
         Button setSens = (Button)findViewById(R.id.setSens);
 
-
-
         ROOT = LiquidSettings.isRoot();
         vibrate.setOnClickListener(this);
         setSens.setOnClickListener(sensListener);
@@ -69,7 +67,6 @@ public class settings extends Activity implements OnClickListener {
         	Toast noroot = Toast.makeText(this, "No root", 2000);
         	noroot.show();
 		}
-		
 	}
 	
 	//sensitivity listener
@@ -110,11 +107,5 @@ public class settings extends Activity implements OnClickListener {
 		System.setProperty("liquidnoise", noi);
 	    }
 	};
-
-	
-	
-	// startup scripts
-
-
 	
 }
