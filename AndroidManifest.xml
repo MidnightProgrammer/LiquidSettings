@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.liquid.custom"
-      android:versionCode="3" android:versionName="0.3">
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:name="Liquidsettings">
+      package="com.cm.settings"
+      android:versionCode="1"
+      android:versionName="1.0">
+    <uses-sdk android:minSdkVersion="8" />
+
+    <application android:icon="@drawable/icon" android:label="@string/app_name">
         <activity android:name=".settings"
-        		  android:screenOrientation="portrait"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -13,6 +15,4 @@
         </activity>
 
     </application>
-
-
-</manifest> 
+</manifest>

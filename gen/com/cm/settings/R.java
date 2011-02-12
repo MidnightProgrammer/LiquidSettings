@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.liquid.custom;
+package com.cm.settings;
 
 public final class R {
     public static final class attr {
