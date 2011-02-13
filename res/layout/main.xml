@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:layout_height="fill_parent" android:clickable="true">
 	<ToggleButton android:id="@+id/vibrate"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:textOn="@string/vibrON" android:textOff="@string/vibrOFF" />
@@ -17,6 +17,7 @@
 	<Button android:text="@string/set" android:id="@+id/setSens" android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
 
 </LinearLayout>
+	<ToggleButton android:id="@+id/setCompcache" android:layout_height="wrap_content" android:layout_width="match_parent" android:text="@string/compcache" android:button="@+id/cc_startup"></ToggleButton>
 
 
 

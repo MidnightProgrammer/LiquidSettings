@@ -10,4 +10,5 @@
 <string name="set">set</string>
 <string name="noiseval">75</string>
 <string name="sensitivityval">75</string>
+<string name="compcache">Compcache</string>
 </resources>

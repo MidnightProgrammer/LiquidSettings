@@ -20,16 +20,17 @@ public class settings extends Activity implements OnClickListener {
     public ToggleButton vibrate;
     public EditText sensitivity;
     public EditText noise;
+    public ToggleButton compcache;
     public SharedPreferences prefs;
     public boolean isFirstTime = false;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        if(LiquidSettings.getModVersion().substring(0,11).equals("CyanogenMod"))  {
+        /*
+        if(LiquidSettings.getModVersion().equals("CyanogenMod"))  {
         	Log.i("*** DEBUG ***", "you're running CyanogenMod");
-        }
+        }*/
         
         /* store value `firstrun` to check if the app's running for
          * the first time.
@@ -56,12 +57,15 @@ public class settings extends Activity implements OnClickListener {
         vibrate = (ToggleButton)findViewById(R.id.vibrate);
         vibrate.setChecked(vibrstatus);
         Button setSens = (Button)findViewById(R.id.setSens);
+        compcache= (ToggleButton)findViewById(R.id.setCompcache);
+        compcache.setChecked(Compcache.autoStart());
         
         ROOT=LiquidSettings.isRoot();
         Toast.makeText(this,"Got root permissions",2000).show();
         
         vibrate.setOnClickListener(this);
         setSens.setOnClickListener(this);
+        compcache.setOnClickListener(this);
         
     }
     
@@ -84,11 +88,11 @@ public class settings extends Activity implements OnClickListener {
 						if(isFirstTime && checkConfFiles()==false) 
 							break;
 				        if(vibrate.isChecked()) {
-				        	LiquidSettings.runRootCommand("echo "+LiquidSettings.getvibr ()+" > /system/etc/init.d/06vibrate");
+				        	LiquidSettings.runRootCommand("echo "+Strings.getvibr ()+" > /system/etc/init.d/06vibrate");
 				        	LiquidSettings.runRootCommand("echo 1 > /sys/module/avr/parameters/vibr");
 				        	LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06vibrate");
 				        } else {
-				        	LiquidSettings.runRootCommand("echo" + LiquidSettings.getnovibr () +"> /system/etc/init.d/06vibrate");
+				        	LiquidSettings.runRootCommand("echo" + Strings.getnovibr () +"> /system/etc/init.d/06vibrate");
 				        	LiquidSettings.runRootCommand("echo 0 > /sys/module/avr/parameters/vibr");
 				        	LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06vibrate");
 				        }
@@ -115,7 +119,7 @@ public class settings extends Activity implements OnClickListener {
 				if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
 					if(isFirstTime && checkConfFiles() == false) 
 						break;
-					LiquidSettings.runRootCommand("echo "+LiquidSettings.getSens(senss, noiss)+" > /system/etc/init.d/06sensitivity");
+					LiquidSettings.runRootCommand("echo "+Strings.getSens(senss, noiss)+" > /system/etc/init.d/06sensitivity");
 					LiquidSettings.runRootCommand("echo "+senss+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/sensitivity");
 					LiquidSettings.runRootCommand("echo "+noiss+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/noise");
 					LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
@@ -131,7 +135,28 @@ public class settings extends Activity implements OnClickListener {
 			System.setProperty("liquidsensitivity", sen);
 			System.setProperty("liquidnoise", noi);
 			break;
-		}	
+			
+		case R.id.setCompcache:
+			Toast.makeText(this,"ciao",2000);
+			if (!Compcache.autoStart()){
+				if (!Compcache.setAutoStart(true)){
+					Toast.makeText(this, "Error while writing compcache autostart",2000).show();
+					break;
+				} else{
+					Toast.makeText(this,"File created",2000);
+				}
+			} else{
+				if(!Compcache.setAutoStart(false)){
+					Toast.makeText(this,"Error while deleting compcache autostart file",2000).show();
+					break;
+				} else {
+					Toast.makeText(this, "File deleted",2000);
+				}	
+			}
+			break;
+			
+		}
+		
 	}
 	
 }
