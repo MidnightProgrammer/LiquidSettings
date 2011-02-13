@@ -1,10 +1,12 @@
 package com.cm.settings;
 
 import java.io.File;
+import java.lang.System;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -25,6 +27,10 @@ public class settings extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        if(LiquidSettings.getModVersion().substring(0,11).equals("CyanogenMod"))  {
+        	Log.i("*** DEBUG ***", "you're running CyanogenMod");
+        }
+        
         /* store value `firstrun` to check if the app's running for
          * the first time.
          */
@@ -35,7 +41,7 @@ public class settings extends Activity implements OnClickListener {
         	edit.putBoolean("firstrun", false);
         	edit.commit();
         }
-        
+      
         boolean vibrstatus = LiquidSettings.vibrStatus();
        
         String sensproperty = System.getProperty("liquidsensitivity");

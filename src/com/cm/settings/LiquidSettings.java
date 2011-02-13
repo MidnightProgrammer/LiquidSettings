@@ -4,10 +4,29 @@ package com.cm.settings;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import android.util.Log;
 
 public class LiquidSettings {
 
+	public static String getModVersion() {
+		String mod = "ro.modversion";
+		String CMversion;
+		BufferedReader input;
+		try {
+            Process get = Runtime.getRuntime().exec("getprop " + mod);
+            input = new BufferedReader(new InputStreamReader(get.getInputStream()), 1024);
+            CMversion = input.readLine();
+            input.close();
+		} catch (IOException ex) {
+            Log.e("*** ERROR ***", "Unable to read mod version.");
+            return null;
+		}
+		return CMversion;
+	}
+	
 	public static boolean isRoot(){
 		return runRootCommand("echo $?");
 	}
