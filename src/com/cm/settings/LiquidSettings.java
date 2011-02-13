@@ -1,10 +1,13 @@
 package com.cm.settings;
 
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.FileReader;
 import android.util.Log;
 
 public class LiquidSettings {
-	
+
 	public static boolean isRoot(){
 		return runRootCommand("echo $?");
 	}
@@ -30,7 +33,7 @@ public class LiquidSettings {
 	                        } catch (Exception e) {}
 	                }
 	                return true;
-	    }
+	}
 	
 	public static boolean vibrStatus() {
 		//Check if the haptic feedback is on
