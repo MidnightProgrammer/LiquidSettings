@@ -15,10 +15,8 @@
 		<EditText android:text="@string/noiseval" android:id="@+id/noise"
 			android:layout_width="60px" android:layout_height="wrap_content" android:numeric="integer" android:maxLines="1" android:inputType="number" android:layout_marginLeft="2dip"></EditText>
 	<Button android:text="@string/set" android:id="@+id/setSens" android:layout_height="wrap_content" android:layout_width="fill_parent"></Button>
-
 </LinearLayout>
-	<ToggleButton android:id="@+id/setCompcache" android:layout_height="wrap_content" android:layout_width="match_parent" android:text="@string/compcache" android:button="@+id/cc_startup"></ToggleButton>
-
-
-
+<ToggleButton android:id="@+id/setCompcache"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:textOn="@string/cmpon" android:textOff="@string/cmpoff" />
 </LinearLayout>

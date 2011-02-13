@@ -27,10 +27,10 @@ public class settings extends Activity implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*
+        
         if(LiquidSettings.getModVersion().equals("CyanogenMod"))  {
         	Log.i("*** DEBUG ***", "you're running CyanogenMod");
-        }*/
+        }
         
         /* store value `firstrun` to check if the app's running for
          * the first time.
@@ -137,7 +137,6 @@ public class settings extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.setCompcache:
-			Toast.makeText(this,"ciao",2000);
 			if (!Compcache.autoStart()){
 				if (!Compcache.setAutoStart(true)){
 					Toast.makeText(this, "Error while writing compcache autostart",2000).show();

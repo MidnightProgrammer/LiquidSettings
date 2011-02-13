@@ -1,6 +1,5 @@
 package com.cm.settings;
 
-import java.io.File;
 
 public class Compcache {
 	
