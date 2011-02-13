@@ -12,7 +12,7 @@ public class LiquidSettings {
 	
 	//DEBUG FUNCTION
 	public static String debugf(){
-		String [] cmd = {"su","echo $1"};
+		String [] cmd = {"su","echo $?"};
 		try{
         	Process proc= Runtime.getRuntime().exec(cmd);
         	BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
