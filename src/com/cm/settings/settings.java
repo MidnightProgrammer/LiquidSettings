@@ -52,8 +52,7 @@ public class settings extends Activity implements OnClickListener {
         Button setSens = (Button)findViewById(R.id.setSens);
         
         ROOT=LiquidSettings.isRoot();
-        Toast isroot = Toast.makeText(this,"Got root permissions",2000);
-        isroot.show();
+        Toast.makeText(this,"Got root permissions",2000).show();
         
         vibrate.setOnClickListener(this);
         setSens.setOnClickListener(this);
@@ -61,11 +60,9 @@ public class settings extends Activity implements OnClickListener {
     }
     
     private boolean checkConfFiles() {
-    	Toast firstime = Toast.makeText(this, "Checking if you can run this application...", 4000);
-		firstime.show();
+    	Toast.makeText(this, "Checking if you can run this application...", 4000).show();
 		if((new File("/system/etc/init.d/06vibrate").exists() == false) && (new File("/sys/module/avr/parameters/vibr")).exists() == false) {
-			Toast nocompatibility = Toast.makeText(this, "Unable to find configuration files", 2000);
-			nocompatibility.show();
+			Toast.makeText(this, "Unable to find configuration files", 2000).show();
 			return false;
 		}
 		return true;
@@ -74,13 +71,12 @@ public class settings extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		
 		switch(v.getId()) {
+		
 			case R.id.vibrate:
 				if(ROOT) {
 					if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
-						if(isFirstTime) {
-							if(checkConfFiles() == false)
-								break;
-						}
+						if(isFirstTime && checkConfFiles()==false) 
+							break;
 				        if(vibrate.isChecked()) {
 				        	LiquidSettings.runRootCommand("echo "+LiquidSettings.getvibr ()+" > /system/etc/init.d/06vibrate");
 				        	LiquidSettings.runRootCommand("echo 1 > /sys/module/avr/parameters/vibr");
@@ -91,21 +87,15 @@ public class settings extends Activity implements OnClickListener {
 				        	LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06vibrate");
 				        }
 				        LiquidSettings.runRootCommand("mount -o ro,remount -t yaffs2 /dev/block/mtdblock1 /system");
-				    } else {
-				        	Toast noroot = Toast.makeText(this, "No write", 2000);
-				        	noroot.show();
 				    }
 				} else {
-						Toast noroot = Toast.makeText(this, "No root", 2000);
-						noroot.show();
+					Toast.makeText(this, "Sorry, you need to ROOT permissions.", 2000).show();
 				}
 				break;
 		
 		case R.id.setSens:
-			
 			int senss = Integer.parseInt(sensitivity.getText().toString());
 			int noiss = Integer.parseInt(noise.getText().toString());
-			
 			if(senss < 25)
 				senss = 25;
 			else if(senss > 75) 
@@ -117,10 +107,8 @@ public class settings extends Activity implements OnClickListener {
 			
 			if(ROOT) {
 				if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
-					if(isFirstTime) {
-						if(checkConfFiles() == false)
-							break;
-					}
+					if(isFirstTime && checkConfFiles() == false) 
+						break;
 					LiquidSettings.runRootCommand("echo "+LiquidSettings.getSens(senss, noiss)+" > /system/etc/init.d/06sensitivity");
 					LiquidSettings.runRootCommand("echo "+senss+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/sensitivity");
 					LiquidSettings.runRootCommand("echo "+noiss+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/noise");
