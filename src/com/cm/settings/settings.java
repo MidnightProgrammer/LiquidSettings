@@ -137,23 +137,26 @@ public class settings extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.setCompcache:
-			if (!Compcache.autoStart()){
-				if (!Compcache.setAutoStart(true)){
+			if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
+				if(isFirstTime && checkConfFiles() == false) 
+					break;
+			}
+			if (Compcache.autoStart() == false){
+				if (Compcache.setAutoStart(true) == false){
 					Toast.makeText(this, "Error while writing compcache autostart",2000).show();
 					break;
 				} else{
-					Toast.makeText(this,"File created",2000);
+					Toast.makeText(this,"File created",2000).show();
 				}
 			} else{
-				if(!Compcache.setAutoStart(false)){
+				if(Compcache.setAutoStart(false) == false){
 					Toast.makeText(this,"Error while deleting compcache autostart file",2000).show();
 					break;
 				} else {
-					Toast.makeText(this, "File deleted",2000);
+					Toast.makeText(this, "File deleted",2000).show();
 				}	
 			}
 			break;
-			
 		}
 		
 	}
