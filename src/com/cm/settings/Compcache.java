@@ -29,4 +29,24 @@ public class Compcache {
 		return (new File("/dev/block/ramzswap0").exists());
 	}
 	
+	public static boolean turnCompcache(boolean status){
+		if(status){
+			if (LiquidSettings.runRootCommand("compcache start"))
+				return ((new File("/dev/block/ramzswap0").exists()) ? true : false);
+			return false;
+		} else {
+			if (LiquidSettings.runRootCommand("compcache stop"))
+				return ((new File("/dev/block/ramzswap0").exists()) ? false : true);
+			return false;
+		}
+	}
+	
+	public static boolean filesExist(){
+		//Check if the necessary files exist
+		if ((new File("/system/bin/compcache").exists()==false) || (new File("/system/bin/insmod").exists()==false) || (new File("/system/lib/modules/ramzswap.ko").exists()==false) || (new File("/system/xbin/rzscontrol").exists()==false) ){
+			return false;
+		}
+		return true;
+	}
+	
 }

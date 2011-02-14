@@ -31,6 +31,7 @@ public class settings extends Activity implements OnClickListener {
         
         if(LiquidSettings.getModVersion().equals("CyanogenMod"))  {
         	Log.i("*** DEBUG ***", "you're running CyanogenMod");
+        	Toast.makeText(this,"You are using a CM ROM. We suggest you to use the CM settings app for the Compcache",4000).show();
         }
         
         /* store value `firstrun` to check if the app's running for
@@ -76,6 +77,10 @@ public class settings extends Activity implements OnClickListener {
     	Toast.makeText(this, "Checking if you can run this application...", 4000).show();
 		if((new File("/system/etc/init.d/06vibrate").exists() == false) && (new File("/sys/module/avr/parameters/vibr")).exists() == false) {
 			Toast.makeText(this, "Unable to find configuration files", 2000).show();
+			return false;
+		}
+		if (Compcache.filesExist()==false){
+			Toast.makeText(this, "You must use a kernel which supports compcache!",2500).show();
 			return false;
 		}
 		return true;
@@ -140,38 +145,42 @@ public class settings extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.setCompcache:
-			if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
-				if(isFirstTime && checkConfFiles() == false) 
-					break;
-			}
-			if (Compcache.autoStart() == false){
-				if (Compcache.setAutoStart(true) == false){
-					Toast.makeText(this, "Error while writing compcache autostart",2000).show();
-					break;
-				} else{
-					Toast.makeText(this,"File created",2000).show();
+			if (Compcache.filesExist()){
+				if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
+					if(isFirstTime && checkConfFiles() == false) 
+						break;
 				}
-			} else{
-				if(Compcache.setAutoStart(false) == false){
-					Toast.makeText(this,"Error while deleting compcache autostart file",2000).show();
-					break;
-				} else {
-					Toast.makeText(this, "File deleted",2000).show();
-				}	
+				if (Compcache.autoStart() == false){
+						if (Compcache.setAutoStart(true) == false)
+							Toast.makeText(this, "Error while writing compcache autostart",2000).show();
+						else
+							Toast.makeText(this,"File created",2000).show();
+				} else{
+					if(Compcache.setAutoStart(false) == false)
+						Toast.makeText(this,"Error while deleting compcache autostart file",2000).show();
+					else
+						Toast.makeText(this, "File deleted",2000).show();
+				}
+			} else {
+				Toast.makeText(this,"Your kernel must support compcache! Can't turn compcache on.",2500).show();
 			}
 			break;
 		
 		case R.id.ccrunning:
-			if (Compcache.isCompcacheRunning()){
-				if (LiquidSettings.runRootCommand("compcache stop"))
-					Toast.makeText(this,"Compcache stopped",2000).show();
-				else
-					Toast.makeText(this,"Error while stopping compcache",2000).show();
-			}else{
-				if (LiquidSettings.runRootCommand("compcache start"))
+			if (Compcache.filesExist()){
+				if (Compcache.isCompcacheRunning()){
+					if (Compcache.turnCompcache(false))
+						Toast.makeText(this,"Compcache stopped",2000).show();
+					else
+						Toast.makeText(this,"Error while stopping compcache",2000).show();
+				}else{
+					if (Compcache.turnCompcache(true))
 						Toast.makeText(this,"Compcache started", 2000).show();
-				else
+					else
 						Toast.makeText(this,"Error while starting compcache",2000).show();
+				}
+			} else {
+				Toast.makeText(this,"Your kernel must support compcache! Can't turn compcache on.",2500);
 			}
 			break;
 		
