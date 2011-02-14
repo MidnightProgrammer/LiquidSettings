@@ -2,8 +2,8 @@
 <resources>
     
     <string name="app_name">Liquid settings</string>
-<string name="vibrON">Vibrate on</string>
-<string name="vibrOFF">Vibrate off</string>
+<string name="vibrON">Haptic Feedback ON</string>
+<string name="vibrOFF">Haptic Feedback OFF</string>
 
 <string name="sens">sensitivity</string>
 <string name="noise">noise</string>
@@ -11,7 +11,7 @@
 <string name="noiseval">75</string>
 <string name="sensitivityval">75</string>
 <string name="cmpon">Compcache Autostart ON</string>
-<string name="cmpoff">Compcache autostart OFF</string>
+<string name="cmpoff">Compcache Autostart OFF</string>
 <string name="ccrunning">Compcache is running</string>
 <string name="ccnrunning">Compcache is not running</string>
 </resources>
