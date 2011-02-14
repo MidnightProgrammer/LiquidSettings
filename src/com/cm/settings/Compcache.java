@@ -11,7 +11,7 @@ public class Compcache {
 	public static boolean setAutoStart(boolean opt){
 		try{
 			if(opt == true){
-				if (LiquidSettings.runRootCommand("echo " + Strings.getCompcacheAutostart() + " > /etc/init.d/06compcache"))
+				if (LiquidSettings.runRootCommand("echo " + Strings.getCompcacheAutostart() + " > /etc/init.d/06compcache") && LiquidSettings.runRootCommand("chmod +x /etc/init.d/06compcache"))
 					return true;
 				else 
 					return false;
