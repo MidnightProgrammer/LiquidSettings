@@ -12,4 +12,6 @@
 <string name="sensitivityval">75</string>
 <string name="cmpon">Compcache Autostart ON</string>
 <string name="cmpoff">Compcache autostart OFF</string>
+<string name="ccrunning">Compcache is running</string>
+<string name="ccnrunning">Compcache is not running</string>
 </resources>

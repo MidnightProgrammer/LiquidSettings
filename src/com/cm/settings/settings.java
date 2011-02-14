@@ -21,6 +21,7 @@ public class settings extends Activity implements OnClickListener {
     public EditText sensitivity;
     public EditText noise;
     public ToggleButton compcache;
+    public ToggleButton runcc;
     public SharedPreferences prefs;
     public boolean isFirstTime = false;
     
@@ -59,13 +60,15 @@ public class settings extends Activity implements OnClickListener {
         Button setSens = (Button)findViewById(R.id.setSens);
         compcache= (ToggleButton)findViewById(R.id.setCompcache);
         compcache.setChecked(Compcache.autoStart());
-        
+        runcc= (ToggleButton) findViewById(R.id.ccrunning);
+        runcc.setChecked(Compcache.isCompcacheRunning());
         ROOT=LiquidSettings.isRoot();
         Toast.makeText(this,"Got root permissions",2000).show();
         
         vibrate.setOnClickListener(this);
         setSens.setOnClickListener(this);
         compcache.setOnClickListener(this);
+        runcc.setOnClickListener(this);
         
     }
     
@@ -157,8 +160,22 @@ public class settings extends Activity implements OnClickListener {
 				}	
 			}
 			break;
+		
+		case R.id.ccrunning:
+			if (Compcache.isCompcacheRunning()){
+				if (LiquidSettings.runRootCommand("compcache stop"))
+					Toast.makeText(this,"Compcache stopped",2000).show();
+				else
+					Toast.makeText(this,"Error while stopping compcache",2000).show();
+			}else{
+				if (LiquidSettings.runRootCommand("compcache start"))
+						Toast.makeText(this,"Compcache started", 2000).show();
+				else
+						Toast.makeText(this,"Error while starting compcache",2000).show();
+			}
+			break;
+		
 		}
 		
 	}
-	
 }

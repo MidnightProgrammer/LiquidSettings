@@ -24,4 +24,9 @@ public class Compcache {
 		} catch (Exception e){}
 		return false;
 	}
+	
+	public static boolean isCompcacheRunning(){
+		return (new File("/dev/block/ramzswap0").exists());
+	}
+	
 }
