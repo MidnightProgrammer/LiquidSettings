@@ -17,6 +17,7 @@ public final class R {
         public static final int LinearLayout01=0x7f050001;
         public static final int TextView01=0x7f050002;
         public static final int TextView02=0x7f050004;
+        public static final int ads=0x7f050009;
         public static final int ccrunning=0x7f050008;
         public static final int noise=0x7f050005;
         public static final int sensitivity=0x7f050003;
@@ -28,11 +29,14 @@ public final class R {
         public static final int main=0x7f030000;
     }
     public static final class string {
+        public static final int adsoff=0x7f04000d;
+        public static final int adson=0x7f04000c;
         public static final int app_name=0x7f040000;
         public static final int ccnrunning=0x7f04000b;
         public static final int ccrunning=0x7f04000a;
         public static final int cmpoff=0x7f040009;
         public static final int cmpon=0x7f040008;
+        public static final int hosts=0x7f04000e;
         public static final int noise=0x7f040004;
         public static final int noiseval=0x7f040006;
         public static final int sens=0x7f040003;

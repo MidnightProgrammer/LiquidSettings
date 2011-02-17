@@ -20,4 +20,5 @@
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:textOn="@string/cmpon" android:textOff="@string/cmpoff" />
 <ToggleButton android:id="@+id/ccrunning" android:text="ToggleButton" android:layout_height="wrap_content" android:textOn="@string/ccrunning" android:textOff="@string/ccnrunning" android:layout_width="match_parent"/>
+<ToggleButton android:layout_width="match_parent" android:layout_height="wrap_content" android:textOn="@string/adson" android:textOff="@string/adsoff" android:text="AdsFilter" android:id="@+id/ads"></ToggleButton>
 </LinearLayout>

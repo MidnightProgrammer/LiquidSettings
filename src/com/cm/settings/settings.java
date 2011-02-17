@@ -22,6 +22,7 @@ public class settings extends Activity implements OnClickListener {
     public EditText noise;
     public ToggleButton compcache;
     public ToggleButton runcc;
+    public ToggleButton ads;
     public SharedPreferences prefs;
     public boolean isFirstTime = false;
     
@@ -40,22 +41,17 @@ public class settings extends Activity implements OnClickListener {
         prefs = getSharedPreferences("liquid-settings-pref", 0);
         if(prefs.getBoolean("firstrun", true)) {
         	isFirstTime = true;
+
         	SharedPreferences.Editor edit = prefs.edit();
         	edit.putBoolean("firstrun", false);
         	edit.commit();
         }
       
         boolean vibrstatus = LiquidSettings.vibrStatus();
-       
-        String sensproperty = System.getProperty("liquidsensitivity");
-        String noiseproperty = System.getProperty("liquidnoise");
         setContentView(R.layout.main);
+        
         sensitivity = (EditText)findViewById(R.id.sensitivity);
         noise = (EditText)findViewById(R.id.noise);
-        if((sensproperty != null) && (noiseproperty != null)) {
-    		sensitivity.setText(sensproperty);
-    		noise.setText(noiseproperty);
-        }
         vibrate = (ToggleButton)findViewById(R.id.vibrate);
         vibrate.setChecked(vibrstatus);
         Button setSens = (Button)findViewById(R.id.setSens);
@@ -63,6 +59,8 @@ public class settings extends Activity implements OnClickListener {
         compcache.setChecked(Compcache.autoStart());
         runcc= (ToggleButton) findViewById(R.id.ccrunning);
         runcc.setChecked(Compcache.isCompcacheRunning());
+        ads= (ToggleButton) findViewById(R.id.ads);
+        ads.setChecked(Adsfilter.isFiltered());
         ROOT=LiquidSettings.isRoot();
         Toast.makeText(this,"Got root permissions",2000).show();
         
@@ -70,7 +68,7 @@ public class settings extends Activity implements OnClickListener {
         setSens.setOnClickListener(this);
         compcache.setOnClickListener(this);
         runcc.setOnClickListener(this);
-        
+        ads.setOnClickListener(this);
     }
     
     private boolean checkConfFiles() {
@@ -145,7 +143,7 @@ public class settings extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.setCompcache:
-			if (Compcache.filesExist()){
+			if (Compcache.filesExist() && ROOT){
 				if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
 					if(isFirstTime && checkConfFiles() == false) 
 						break;
@@ -167,7 +165,7 @@ public class settings extends Activity implements OnClickListener {
 			break;
 		
 		case R.id.ccrunning:
-			if (Compcache.filesExist()){
+			if (Compcache.filesExist() && ROOT){
 				if (Compcache.isCompcacheRunning()){
 					if (Compcache.turnCompcache(false))
 						Toast.makeText(this,"Compcache stopped",2000).show();
@@ -183,6 +181,25 @@ public class settings extends Activity implements OnClickListener {
 				Toast.makeText(this,"Your kernel must support compcache! Can't turn compcache on.",2500);
 			}
 			break;
+		
+		case R.id.ads:
+			if (ROOT){
+				
+				if (Adsfilter.isFiltered()){
+					if (Adsfilter.restoreHostsFile())
+						Toast.makeText(this,"Hosts file restored",2000).show();
+					else
+						Toast.makeText(this,"Error restoring hosts file",2000).show();
+				} else{
+					if (Adsfilter.apply(this))
+						Toast.makeText(this,"Hosts file patched",2000).show();
+					else
+						Toast.makeText(this,"Error patching hosts file",2000).show();
+				}
+			}
+			break;
+			
+			
 		
 		}
 		
