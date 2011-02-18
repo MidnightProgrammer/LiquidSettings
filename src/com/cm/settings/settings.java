@@ -61,9 +61,8 @@ public class settings extends Activity implements OnClickListener {
         ads= (ToggleButton) findViewById(R.id.ads);
         ads.setChecked(Adsfilter.isFiltered());
         ROOT=LiquidSettings.isRoot();
-        Toast.makeText(this,"Got root permissions",2000).show();
         //
-        sensitivity.setText(prefs.getString("sens","25"));
+        sensitivity.setText(prefs.getString("sens", "25"));
         noise.setText(prefs.getString("noise", "50"));
         //
         vibrate.setOnClickListener(this);
@@ -74,6 +73,7 @@ public class settings extends Activity implements OnClickListener {
     }
     
     private boolean checkConfFiles() {
+    	isFirstTime = false;
     	Toast.makeText(this, "Checking if you can run this application...", 4000).show();
 		if((new File("/system/etc/init.d/06vibrate").exists() == false) && (new File("/sys/module/avr/parameters/vibr")).exists() == false) {
 			Toast.makeText(this, "Unable to find configuration files", 2000).show();
@@ -87,10 +87,9 @@ public class settings extends Activity implements OnClickListener {
     }
     
 	public void onClick(View v) {
-		
 		switch(v.getId()) {
 		
-			case R.id.vibrate:
+			case R.id.vibrate: //If button pressed is 'Haptic FeedBack'
 				if(ROOT) {
 					if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
 						if(isFirstTime && checkConfFiles()==false) 
@@ -111,11 +110,11 @@ public class settings extends Activity implements OnClickListener {
 				}
 				break;
 		
-		case R.id.setSens:
+		case R.id.setSens: //If button pressed is 'Set sensitivity'
 			int senss = Integer.parseInt(sensitivity.getText().toString());
 			int noiss = Integer.parseInt(noise.getText().toString());
 			if(senss < 20)
-				senss = 25;
+				senss = 20;
 			else if(senss > 75) 
 				senss = 75;
 			if(noiss < 25)
@@ -136,15 +135,14 @@ public class settings extends Activity implements OnClickListener {
 					editor.putString("sens", Integer.toString(senss));
 					editor.putString("noise", Integer.toString(noiss));
 					editor.commit();
+					Toast.makeText(this, "Sensitivity set correctly", 1750).show();
 				}
 			}
-			
-			
-			sensitivity.setText(senss);
-			noise.setText(noiss);
+			sensitivity.setText(Integer.toString(senss));
+			noise.setText(Integer.toString(noiss));
 			break;
 			
-		case R.id.setCompcache:
+		case R.id.setCompcache: //If button pressed is 'Compcache Autostart'
 			if (Compcache.filesExist() && ROOT){
 				if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
 					if(isFirstTime && checkConfFiles() == false) 
@@ -166,7 +164,7 @@ public class settings extends Activity implements OnClickListener {
 			}
 			break;
 		
-		case R.id.ccrunning:
+		case R.id.ccrunning: //If button pressed 'Compcache start/stop'
 			if (Compcache.filesExist() && ROOT){
 				if (Compcache.isCompcacheRunning()){
 					if (Compcache.turnCompcache(false))
@@ -184,9 +182,8 @@ public class settings extends Activity implements OnClickListener {
 			}
 			break;
 		
-		case R.id.ads:
+		case R.id.ads: //If button pressed is 'Ads filter'
 			if (ROOT){
-				
 				if (Adsfilter.isFiltered()){
 					if (Adsfilter.restoreHostsFile())
 						Toast.makeText(this,"Hosts file restored",2000).show();
@@ -201,7 +198,7 @@ public class settings extends Activity implements OnClickListener {
 			}
 			break;	
 		
-		}
-		
-	}
+		} //END SWITCH STATEMENT
+	
+	} //END OnClick function
 }
