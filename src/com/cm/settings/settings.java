@@ -92,19 +92,13 @@ public class settings extends Activity implements OnClickListener {
 			case R.id.vibrate: //If button pressed is 'Haptic FeedBack'
 				if(ROOT) {
 					if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
-						if(isFirstTime && checkConfFiles()==false) 
-							break;
-				        if(vibrate.isChecked()) {
-				        	LiquidSettings.runRootCommand("echo "+Strings.getvibr ()+" > /system/etc/init.d/06vibrate");
-				        	LiquidSettings.runRootCommand("echo 1 > /sys/module/avr/parameters/vibr");
-				        	LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06vibrate");
-				        } else {
-				        	LiquidSettings.runRootCommand("echo" + Strings.getnovibr () +"> /system/etc/init.d/06vibrate");
-				        	LiquidSettings.runRootCommand("echo 0 > /sys/module/avr/parameters/vibr");
-				        	LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06vibrate");
-				        }
+						Boolean hapticon = LiquidSettings.vibrStatus();
+						LiquidSettings.runRootCommand("echo "+((hapticon==true)? Strings.getnovibr() : Strings.getvibr())+" > /system/etc/init.d/06vibrate");
+				        LiquidSettings.runRootCommand("echo " +((hapticon==true) ? "0" : "1") + " > /sys/module/avr/parameters/vibr");
+				        LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06vibrate");
 				        LiquidSettings.runRootCommand("mount -o ro,remount -t yaffs2 /dev/block/mtdblock1 /system");
-				    }
+				        Toast.makeText(this, "Haptic set on " + Boolean.toString(hapticon), 1500).show();
+					}
 				} else {
 					Toast.makeText(this, "Sorry, you need to ROOT permissions.", 2000).show();
 				}
