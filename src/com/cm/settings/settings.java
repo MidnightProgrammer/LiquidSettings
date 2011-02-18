@@ -1,7 +1,6 @@
 package com.cm.settings;
 
 import java.io.File;
-import java.lang.System;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -63,7 +62,10 @@ public class settings extends Activity implements OnClickListener {
         ads.setChecked(Adsfilter.isFiltered());
         ROOT=LiquidSettings.isRoot();
         Toast.makeText(this,"Got root permissions",2000).show();
-        
+        //
+        sensitivity.setText(prefs.getString("sens","25"));
+        noise.setText(prefs.getString("noise", "50"));
+        //
         vibrate.setOnClickListener(this);
         setSens.setOnClickListener(this);
         compcache.setOnClickListener(this);
@@ -112,7 +114,7 @@ public class settings extends Activity implements OnClickListener {
 		case R.id.setSens:
 			int senss = Integer.parseInt(sensitivity.getText().toString());
 			int noiss = Integer.parseInt(noise.getText().toString());
-			if(senss < 25)
+			if(senss < 20)
 				senss = 25;
 			else if(senss > 75) 
 				senss = 75;
@@ -130,16 +132,16 @@ public class settings extends Activity implements OnClickListener {
 					LiquidSettings.runRootCommand("echo "+noiss+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/noise");
 					LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 					LiquidSettings.runRootCommand("mount -o ro,remount -t yaffs2 /dev/block/mtdblock1 /system");
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putString("sens", Integer.toString(senss));
+					editor.putString("noise", Integer.toString(noiss));
+					editor.commit();
 				}
 			}
 			
-			String sen = String.valueOf(senss);
-			String noi = String.valueOf(noiss);
 			
-			sensitivity.setText(sen);
-			noise.setText(noi);
-			System.setProperty("liquidsensitivity", sen);
-			System.setProperty("liquidnoise", noi);
+			sensitivity.setText(senss);
+			noise.setText(noiss);
 			break;
 			
 		case R.id.setCompcache:
@@ -197,9 +199,7 @@ public class settings extends Activity implements OnClickListener {
 						Toast.makeText(this,"Error patching hosts file",2000).show();
 				}
 			}
-			break;
-			
-			
+			break;	
 		
 		}
 		
