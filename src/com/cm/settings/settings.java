@@ -129,7 +129,8 @@ public class settings extends Activity implements OnClickListener {
 					editor.putString("sens", Integer.toString(senss));
 					editor.putString("noise", Integer.toString(noiss));
 					editor.commit();
-					Toast.makeText(this, "Sensitivity set correctly", 1750).show();
+					if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
+						Toast.makeText(this, "Sensitivity set correctly", 1750).show();
 				}
 			}
 			sensitivity.setText(Integer.toString(senss));
