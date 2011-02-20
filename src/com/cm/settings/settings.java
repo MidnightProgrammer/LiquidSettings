@@ -6,11 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-<<<<<<< HEAD
 import android.preference.EditTextPreference;
-=======
-import android.preference.ListPreference;
->>>>>>> aad17ab920b09b8637fba0fc97ae2474a824720a
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -35,12 +31,8 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference compcacheauto = (CheckBoxPreference)findPreference("cc_auto");
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");
 		final CheckBoxPreference ads = (CheckBoxPreference)findPreference("ads_filter");
-<<<<<<< HEAD
 		editNoise = (EditTextPreference)findPreference("noise");
 		editSensitivity = (EditTextPreference)findPreference("sensitivity");
-=======
-		final ListPreference sens= (ListPreference)findPreference ("sens");
->>>>>>> aad17ab920b09b8637fba0fc97ae2474a824720a
 		compcachestart.setChecked(Compcache.isCompcacheRunning());
 		compcacheauto.setChecked(Compcache.autoStart());
 		hf.setChecked(LiquidSettings.vibrStatus());
@@ -184,7 +176,6 @@ public class settings extends PreferenceActivity {
 			}
 			
 		});
-<<<<<<< HEAD
 		
 		editNoise.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
@@ -262,15 +253,6 @@ public class settings extends PreferenceActivity {
 	private void updateValues() {
 		editNoise.setSummary("noise is set to " + noiseValue);
 		editSensitivity.setSummary("sensitivity is set to " + sensitivityValue);
-=======
-	
-		sens.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-
-			public boolean onPreferenceClick(Preference preference) {
-				return true;
-			}
-		});
->>>>>>> aad17ab920b09b8637fba0fc97ae2474a824720a
 	}
 	
 	private boolean checkConfFiles() {

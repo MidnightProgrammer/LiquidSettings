@@ -39,8 +39,9 @@ public final class R {
         public static final int ccrunning=0x7f04000a;
         public static final int cmpoff=0x7f040009;
         public static final int cmpon=0x7f040008;
-        public static final int hosts=0x7f04000e;
+        public static final int hosts=0x7f04000f;
         public static final int noise=0x7f040004;
+        public static final int noiseandsetsumm=0x7f04000e;
         public static final int noiseval=0x7f040006;
         public static final int sens=0x7f040003;
         public static final int sensitivityval=0x7f040007;
