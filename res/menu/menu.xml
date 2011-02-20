@@ -35,5 +35,6 @@
                 android:key="ads_filter"
                 android:title="Ads filter"
                 android:summary="avoid ads banner" />
+    
     </PreferenceCategory>
 </PreferenceScreen>
