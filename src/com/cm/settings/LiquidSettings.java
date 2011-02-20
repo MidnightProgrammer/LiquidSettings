@@ -54,6 +54,7 @@ public class LiquidSettings {
 	                return true;
 	}
 	
+	/* we don't need it anymore. */
 	public static boolean vibrStatus() {
 		//Check if the haptic feedback is on
     	String value;

@@ -19,7 +19,7 @@ public class Strings {
 	        );	
 		}
 	
-	public static String getSens(int sens, int noise){
+	public static String getSens(String sens, String noise){
 		return String.format("%s\n%s\n%s\n%s\n%s", 
 	            "\"#!/system/bin/sh",
 	            "#script created by liquid custom settings",
