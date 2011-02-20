@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -26,6 +27,7 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference compcacheauto = (CheckBoxPreference)findPreference("cc_auto");
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");
 		final CheckBoxPreference ads = (CheckBoxPreference)findPreference("ads_filter");
+		final ListPreference sens= (ListPreference)findPreference ("sens");
 		compcachestart.setChecked(Compcache.isCompcacheRunning());
 		compcacheauto.setChecked(Compcache.autoStart());
 		hf.setChecked(LiquidSettings.vibrStatus());
@@ -159,6 +161,13 @@ public class settings extends PreferenceActivity {
 				return true;
 			}
 			
+		});
+	
+		sens.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			public boolean onPreferenceClick(Preference preference) {
+				return true;
+			}
 		});
 	}
 	
