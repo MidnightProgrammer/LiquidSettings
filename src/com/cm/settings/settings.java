@@ -181,45 +181,45 @@ public class settings extends PreferenceActivity {
 
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				noiseValue = newValue.toString();
+				if (!(Utils.onlyNumbers(noiseValue)))
+					return false;
 				int noiseValueInt = Integer.parseInt(noiseValue);
-				if(noiseValueInt < 20) {
-					sensitivityValue = "20";
-				}
-				if(noiseValueInt < 25) {
-					sensitivityValue = "25";
-				}
-				else if(noiseValueInt > 75) {
-					sensitivityValue = "75";
-				}
-
-				if(ROOT) {
-					if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
-						if(isFirstTime && checkConfFiles() == false) {
-							Toast.makeText(context, "Error, unable to find configuration files.", 2000).show();
-						} else {
-							LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue)+" > /system/etc/init.d/06sensitivity");
-							LiquidSettings.runRootCommand("echo "+sensitivityValue+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/sensitivity");
-							LiquidSettings.runRootCommand("echo "+noiseValue+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/noise");
-							LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
-							LiquidSettings.runRootCommand("mount -o ro,remount -t yaffs2 /dev/block/mtdblock1 /system");
-							if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
-								Toast.makeText(context, "Noise set correctly", 1750).show();
-							else 
-								Toast.makeText(context, "Error, unable to set noise", 2000).show();
+				if(noiseValueInt < 20) 
+					noiseValue = "20";
+				else if(noiseValueInt > 75) 
+					noiseValue = "75";
+				
+					if(ROOT) {
+						if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
+							if(isFirstTime && checkConfFiles() == false) {
+								Toast.makeText(context, "Error, unable to find configuration files.", 2000).show();
+							} else {
+								LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue)+" > /system/etc/init.d/06sensitivity");
+								LiquidSettings.runRootCommand("echo "+sensitivityValue+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/sensitivity");
+								LiquidSettings.runRootCommand("echo "+noiseValue+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/noise");
+								LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
+								LiquidSettings.runRootCommand("mount -o ro,remount -t yaffs2 /dev/block/mtdblock1 /system");
+								if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
+									Toast.makeText(context, "Noise set correctly", 1750).show();
+								else 
+									Toast.makeText(context, "Error, unable to set noise", 2000).show();
+							}
 						}
+						updateValues();
+					} else {
+						Toast.makeText(context, "Sorry, you need ROOT permissions.", 2000).show();
 					}
-					updateValues();
-				} else {
-					Toast.makeText(context, "Sorry, you need ROOT permissions.", 2000).show();
-				}
 				return true;
 			}
 		});
+		
 		
 		editSensitivity.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				sensitivityValue = newValue.toString();
+				if (!(Utils.onlyNumbers(sensitivityValue)))
+					return false;
 				int sensitivityValueInt = Integer.parseInt(sensitivityValue);
 				if(sensitivityValueInt > 75) {
 					sensitivityValue = "75";

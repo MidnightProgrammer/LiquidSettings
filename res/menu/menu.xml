@@ -7,19 +7,19 @@
 		android:key="noise" 
 		android:title="Set noise"
                 android:summary="@string/noiseandsetsumm"
-		android:defaultValue="Nothing"/>
+		android:defaultValue="50"/>
 	<EditTextPreference 
 		android:key="sensitivity" 
 		android:title="Set sensitivity"
                 android:summary="@string/noiseandsetsumm"
-		android:defaultValue="Nothing" />
+		android:defaultValue="25" />
     </PreferenceCategory>
     <PreferenceCategory
             android:title="Compcache settings">
         <CheckBoxPreference
                 android:key="cc_run"
                 android:title="Compcache ON/OFF"
-                android:summary="compcache" />
+                android:summary="compressed RAM" />
 	<CheckBoxPreference
                 android:key="cc_auto"
                 android:title="Compcache autostart"
