@@ -42,7 +42,7 @@ public class settings extends PreferenceActivity {
 		noiseValue = editNoise.getText();
 		sensitivityValue = editSensitivity.getText();
 		
-		if(LiquidSettings.getModVersion().equals("CyanogenMod"))  {
+		if(LiquidSettings.getModVersion().contains("CyanogenMod"))  {
         	Log.i("*** DEBUG ***", "you're running CyanogenMod");
         	Toast.makeText(this,"You are using a CM ROM. We suggest you to use the CM settings app for the Compcache",4000).show();
         }
@@ -188,9 +188,10 @@ public class settings extends PreferenceActivity {
 					noiseValue = "20";
 				else if(noiseValueInt > 75) 
 					noiseValue = "75";
-				if (!(Utils.onlyNumbers(sensitivityValue)))
-					return false;
-				
+				if (!(Utils.onlyNumbers(sensitivityValue))){
+					updateValues();
+					return true;
+				}
 				if(ROOT) {
 					if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
 						if(isFirstTime && checkConfFiles() == false) {
@@ -202,7 +203,7 @@ public class settings extends PreferenceActivity {
 							LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 							LiquidSettings.runRootCommand("mount -o ro,remount -t yaffs2 /dev/block/mtdblock1 /system");
 							if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
-								Toast.makeText(context, "Noise set correctly", 1750).show();
+								Toast.makeText(context, "Sensitivity set correctly", 1750).show();
 							else 
 								Toast.makeText(context, "Error, unable to set noise", 2000).show();
 						}
@@ -227,8 +228,10 @@ public class settings extends PreferenceActivity {
 					sensitivityValue = "20";
 				else if (sensitivityValueInt>75)
 					sensitivityValue="75";
-				if(!(Utils.onlyNumbers(noiseValue)))
-					return false;
+				if(!(Utils.onlyNumbers(noiseValue))){
+					updateValues();
+					return true;
+				}
 				
 				if(ROOT) {
 					if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
