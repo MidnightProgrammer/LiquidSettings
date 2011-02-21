@@ -36,7 +36,7 @@ public class Compcache {
 			return false;
 		} else {
 			if (LiquidSettings.runRootCommand("compcache stop"))
-				return ((new File("/dev/block/ramzswap0").exists()) ? false : true);
+				return (!(new File("/dev/block/ramzswap0").exists()));
 			return false;
 		}
 	}
