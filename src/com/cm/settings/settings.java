@@ -46,10 +46,6 @@ public class settings extends PreferenceActivity {
         	Log.i("*** DEBUG ***", "you're running CyanogenMod");
         	Toast.makeText(this,"You are using a CM ROM. We suggest you to use the CM settings app for the Compcache",4000).show();
         }
-        
-        /* store value `firstrun` to check if the app's running for
-         * the first time.
-         */
 		
         prefs = getSharedPreferences("liquid-settings-pref", 0);
         if(prefs.getBoolean("firstrun", true)) {
