@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceScreen
+		android:title="Sensitivity settings"
+		android:summary="set sensitivity and noise">
+	 <PreferenceCategory
+   	 	android:title="Sensitivity and noise">
+	<com.cm.settings.SeekBarPreference
+                android:key="customPref1"
+                android:title="Custom Preference1" /> 
+    </PreferenceCategory>
+    </PreferenceScreen>
      <PreferenceCategory
             android:title="Noise and sensitivity">
 	<EditTextPreference 
