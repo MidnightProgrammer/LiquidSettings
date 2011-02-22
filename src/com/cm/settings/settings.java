@@ -165,26 +165,23 @@ public class settings extends PreferenceActivity {
 		editNoise.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				noiseValue = newValue.toString();
-				if (!(Utils.onlyNumbers(noiseValue)))
+				if (!Strings.onlyNumber(newValue.toString())){
+					Toast.makeText(context, "You must enter a numeric value!", 2000).show();
 					return false;
+				} //Check if the value is numeric, THEN assign it to noiseValue
+				noiseValue = newValue.toString();
 				int noiseValueInt = Integer.parseInt(noiseValue);
 				if(noiseValueInt < 20) 
 					noiseValue = "20";
 				else if(noiseValueInt > 75) 
 					noiseValue = "75";
-				if (!(Utils.onlyNumbers(sensitivityValue))){
-					updateValues();
-					return true;
-				}
+
 				if(ROOT) {
 					if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
 						if(isFirstTime && checkConfFiles() == false) {
 							Toast.makeText(context, "Error, unable to find configuration files.", 2000).show();
 						} else {
 							LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue)+" > /system/etc/init.d/06sensitivity");
-							LiquidSettings.runRootCommand("echo "+sensitivityValue+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/sensitivity");
-							LiquidSettings.runRootCommand("echo "+noiseValue+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/noise");
 							LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 							LiquidSettings.runRootCommand("mount -o ro,remount -t yaffs2 /dev/block/mtdblock1 /system");
 							if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
@@ -205,18 +202,16 @@ public class settings extends PreferenceActivity {
 		editSensitivity.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				sensitivityValue = newValue.toString();
-				if (!(Utils.onlyNumbers(sensitivityValue)))
+				if (!Strings.onlyNumber(newValue.toString())){
+					Toast.makeText(context, "You must enter a numeric value!", 2000).show();
 					return false;
+				} //Check if the value is numeric, THEN assign it to sensitivityValue
+				sensitivityValue = newValue.toString();
 				int sensitivityValueInt = Integer.parseInt(sensitivityValue);
 				if(sensitivityValueInt < 20)
 					sensitivityValue = "20";
 				else if (sensitivityValueInt>75)
 					sensitivityValue="75";
-				if(!(Utils.onlyNumbers(noiseValue))){
-					updateValues();
-					return true;
-				}
 				
 				if(ROOT) {
 					if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
@@ -224,8 +219,6 @@ public class settings extends PreferenceActivity {
 							Toast.makeText(context, "Error, unable to find configuration files.", 2000).show();
 						} else {
 							LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue)+" > /system/etc/init.d/06sensitivity");
-							LiquidSettings.runRootCommand("echo "+sensitivityValue+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/sensitivity");
-							LiquidSettings.runRootCommand("echo "+noiseValue+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/noise");
 							LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 							LiquidSettings.runRootCommand("mount -o ro,remount -t yaffs2 /dev/block/mtdblock1 /system");
 							if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))

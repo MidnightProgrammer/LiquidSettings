@@ -1,5 +1,7 @@
 package com.cm.settings;
 
+import android.util.Log;
+
 public class Strings {
 	public static String getnovibr(){
 		return String.format("%s\n%s\n%s\n%s", 
@@ -35,5 +37,15 @@ public class Strings {
 				"#",
 				"compcache start\""
 				);
+	}
+	
+	public static boolean onlyNumber(String str){
+		try {
+			Integer.parseInt(str);
+			return true;
+		} catch (NumberFormatException excp){
+			Log.e("Liquid-settings", excp.getMessage());
+			return false;
+		}
 	}
 }
