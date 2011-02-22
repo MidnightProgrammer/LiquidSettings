@@ -44,10 +44,15 @@ public class settings extends PreferenceActivity {
 		
 		if(LiquidSettings.getModVersion().contains("CyanogenMod"))  {
         	Log.i("*** DEBUG ***", "you're running CyanogenMod");
-        	Toast.makeText(this,"You are using a CM ROM. We suggest you to use the CM settings app for the Compcache",4000).show();
+        	Toast.makeText(this,"You are using a CM ROM. We suggest you to use the CM settings app for the Compcache",6000).show();
         	compcacheauto.setEnabled(false);
         	compcachestart.setEnabled(false);
         }
+		
+		if (!Compcache.filesExist()){
+			compcacheauto.setEnabled(false);
+			compcachestart.setEnabled(false);
+		}
 		
         prefs = getSharedPreferences("liquid-settings-pref", 0);
         if(prefs.getBoolean("firstrun", true)) {
@@ -63,54 +68,41 @@ public class settings extends PreferenceActivity {
 		compcachestart.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			public boolean onPreferenceClick(Preference preference) {
-				if(!compcachestart.isChecked()) {
-					if (Compcache.filesExist() && ROOT) {
-						if (Compcache.isCompcacheRunning()) {
-							if (Compcache.turnCompcache(false))
-								Toast.makeText(context,"Compcache stopped",2000).show();
-						    else
-								Toast.makeText(context,"Error while stopping compcache",2000).show();
-						}
-					} else {
-						Toast.makeText(context,"Your kernel must support compcache! Can't turn compcache on.",2500);
-					}
-				} else {
-						if (Compcache.turnCompcache(true))
-							Toast.makeText(context,"Compcache started", 2000).show();
-						else
-							Toast.makeText(context,"Error while starting compcache",2000).show();
-				}
-				return true;
+				if (ROOT){
+					if (Compcache.turnCompcache(compcachestart.isChecked())){
+						Toast.makeText(context, "Compcache " + ((compcachestart.isChecked()) ? "started" : "stopped"), 2000).show();
+						return true;
+					} else{
+						Toast.makeText(context, "Error while turning on/off compcache", 2000).show();
+						return false;
+					} 
+				}else {
+						Toast.makeText(context, "Sorry, you need ROOT permissions", 2000);
+						return false;
+				}	
 			}
-			
 		});
 		
 		
 		compcacheauto.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			public boolean onPreferenceClick(Preference preference) {
-				if (Compcache.filesExist() && ROOT) {
+				if (ROOT) {
 					if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
-						if(isFirstTime && checkConfFiles() == false) 
-							Toast.makeText(context, "Unable to find configuration files", 2000);
-					}
-					if(compcacheauto.isChecked()) {
-						if (Compcache.autoStart() == false){
-								if (Compcache.setAutoStart(true) == false)
-									Toast.makeText(context, "Error while writing compcache autostart",2000).show();
-								else
-									Toast.makeText(context,"File created",2000).show();
+						if(isFirstTime && checkConfFiles() == false){
+							Toast.makeText(context, "Unable to find configuration files", 2000).show();
+							return false;
 						}
-					} else {
-						if(Compcache.setAutoStart(false) == false)
-							Toast.makeText(context,"Error while deleting compcache autostart file",2000).show();
-						else
-							Toast.makeText(context, "File deleted",2000).show();
 					}
-				} else {
-					Toast.makeText(context, "Your kernel must support compcache! Can't turn compcache on.",2500).show();
+					if (Compcache.setAutoStart(compcachestart.isChecked())){
+						Toast.makeText(context, "Compcache autostart set on " + Boolean.toString(compcachestart.isChecked()), 2000).show();
+						return true;
+					}
+					return false;
+				} else{
+					Toast.makeText(context, "Sorry, you need ROOT permissions",	2000).show();
+					return false;
 				}
-				return true;
 			}
 		});
 		
