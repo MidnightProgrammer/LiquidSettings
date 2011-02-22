@@ -57,6 +57,7 @@ public class settings extends PreferenceActivity {
         
         updateValues();
         
+        
 		compcachestart.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			public boolean onPreferenceClick(Preference preference) {
@@ -81,6 +82,7 @@ public class settings extends PreferenceActivity {
 			}
 			
 		});
+		
 		
 		compcacheauto.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
@@ -114,25 +116,17 @@ public class settings extends PreferenceActivity {
 		hf.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
-				if(ROOT) {
-					if(hf.isChecked()) {
+				if(ROOT){
 						if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
-							LiquidSettings.runRootCommand("echo " + Strings.getvibr() + " > /system/etc/init.d/06vibrate");
-							LiquidSettings.runRootCommand("echo 1 > /sys/module/avr/parameters/vibr");
+							LiquidSettings.runRootCommand("echo " + ((hf.isChecked()) ? Strings.getvibr() : Strings.getnovibr()) + " > /system/etc/init.d/06vibrate");
+							LiquidSettings.runRootCommand("echo " + ((hf.isChecked()==true) ? "1": "0") +" > /sys/module/avr/parameters/vibr");
 							LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06vibrate");
 							LiquidSettings.runRootCommand("mount -o ro,remount -t yaffs2 /dev/block/mtdblock1 /system");
-							Toast.makeText(context, "Haptic set on true", 1500).show();
+							Toast.makeText(context, "Haptic set on " + Boolean.toString(hf.isChecked()), 1500).show();
 						} else {
 							Toast.makeText(context, "Error: unable to mount partition", 2000);
 							hf.setChecked(false);
 						}
-					} else {
-						LiquidSettings.runRootCommand("echo " + Strings.getnovibr() + " > /system/etc/init.d/06vibrate");
-						LiquidSettings.runRootCommand("echo 0 > /sys/module/avr/parameters/vibr");
-						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06vibrate");
-						LiquidSettings.runRootCommand("mount -o ro,remount -t yaffs2 /dev/block/mtdblock1 /system");
-						Toast.makeText(context, "Haptic set on false", 1500).show();
-					}
 				} else {
 					Toast.makeText(context, "Sorry, you need ROOT permissions.", 2000).show();
 					hf.setChecked(false);
@@ -172,6 +166,7 @@ public class settings extends PreferenceActivity {
 			}
 			
 		});
+		
 		
 		editNoise.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
@@ -254,10 +249,12 @@ public class settings extends PreferenceActivity {
 		});
 	}
 	
+	
 	private void updateValues() {
 		editNoise.setSummary("noise is set to " + noiseValue);
 		editSensitivity.setSummary("sensitivity is set to " + sensitivityValue);
 	}
+	
 	
 	private boolean checkConfFiles() {
     	isFirstTime = false;
