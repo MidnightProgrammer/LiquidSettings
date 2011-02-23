@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceScreen
-		android:title="Sensitivity settings"
-		android:summary="set sensitivity and noise">
-	 <PreferenceCategory
-   	 	android:title="Sensitivity and noise">
-	<com.cm.settings.SeekBarPreference
-                android:key="customPref1"
-                android:title="Custom Preference1" /> 
-    </PreferenceCategory>
-    </PreferenceScreen>
      <PreferenceCategory
             android:title="Noise and sensitivity">
 	<EditTextPreference 
@@ -55,19 +45,29 @@
    		  <PreferenceScreen 
     		android:title="Info"
     		android:summary="Some info about the app">
-    		<Preference
-    			android:key="devs"
-    			android:title="Developers"
-    			android:summary="gnufabio and enrix835" />
-    		<Preference
-    			android:key="donate"
-    			android:title="Click to donate"
-    			android:summary="to allow us to add this app to the market" />
-    		<Preference
-    			android:key="follow"
+    		<PreferenceCategory
+    			android:title="Developers">
+    			<Preference
+    				android:key="gnufabio_twt"
+    				android:title="Gnufabio"
+    				android:summary="click to open gnufabio's twitter page" />
+    			<Preference
+    				android:key="enrix_twt"
+    				android:title="Enrix835"
+    				android:summary="click to open enrix835's twitter page" />
+    		</PreferenceCategory>
+    		<PreferenceCategory
+    			android:title="Links">	
+    			<Preference
+    				android:key="donate"
+    				android:title="Click to donate"
+    				android:summary="to allow us to add this app to the market" />
+    			<Preference
+    				android:key="follow"
     				android:title="Follow us"
     				android:summary="on the official thread at Liquid @ Modaco" />
-    			<PreferenceCategory
+    		</PreferenceCategory>
+    		<PreferenceCategory
     			android:title="Help">
     			<Preference
     				android:key="sens_help"
@@ -87,5 +87,6 @@
     				android:summary="@string/ads_help" />
     		</PreferenceCategory>
     	</PreferenceScreen>
-    </PreferenceCategory>
+    	
+	</PreferenceCategory>
 </PreferenceScreen>

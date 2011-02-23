@@ -35,6 +35,8 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference ads = (CheckBoxPreference)findPreference("ads_filter");
 		final Preference donate = (Preference) findPreference("donate");
 		final Preference follow = (Preference) findPreference("follow");
+		final Preference gnufabio_twt = (Preference) findPreference("gnufabio_twt");
+		final Preference enrix_twt = (Preference) findPreference("enrix_twt");
 		
 		editNoise = (EditTextPreference)findPreference("noise");
 		editSensitivity = (EditTextPreference)findPreference("sensitivity");
@@ -253,6 +255,24 @@ public class settings extends PreferenceActivity {
 	follow.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 		public boolean onPreferenceClick(Preference preference) {
 			Uri url = Uri.parse("http://goo.gl/TNHFJ"); 
+			Intent launchbrowser = new Intent(Intent.ACTION_VIEW,url);
+			startActivity(launchbrowser);
+			return true;
+		}
+});
+	
+	gnufabio_twt.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+		public boolean onPreferenceClick(Preference preference) {
+			Uri url = Uri.parse("http://twitter.com/#!/GnuFabio"); 
+			Intent launchbrowser = new Intent(Intent.ACTION_VIEW,url);
+			startActivity(launchbrowser);
+			return true;
+		}
+});
+	
+	enrix_twt.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+		public boolean onPreferenceClick(Preference preference) {
+			Uri url = Uri.parse("http://twitter.com/#!/enrix835"); 
 			Intent launchbrowser = new Intent(Intent.ACTION_VIEW,url);
 			startActivity(launchbrowser);
 			return true;
