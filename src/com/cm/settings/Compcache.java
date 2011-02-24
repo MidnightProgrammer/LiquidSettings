@@ -1,6 +1,7 @@
 package com.cm.settings;
 
 import java.io.File;
+import android.util.Log;
 
 public class Compcache {
 	
@@ -26,17 +27,22 @@ public class Compcache {
 	}
 	
 	public static boolean isCompcacheRunning(){
-		return (new File("/dev/block/ramzswap0").exists());
+		return ((new File("/dev/block/ramzswap0").exists()) ? true : false);
 	}
 	
 	public static boolean turnCompcache(boolean status){
 		if(status){
 			if (LiquidSettings.runRootCommand("compcache start"))
-				return ((new File("/dev/block/ramzswap0").exists()) ? true : false);
+				return ((isCompcacheRunning()) ? true : false);
 			return false;
 		} else {
-			if (LiquidSettings.runRootCommand("compcache stop"))
-				return (!(new File("/dev/block/ramzswap0").exists()));
+			if (LiquidSettings.runRootCommand("compcache stop")){
+				//This for statement is to waste time
+				//Compcache can't stop immediatly, so the app
+				//must wait time before return true.
+				while ((isCompcacheRunning())){}
+				return true;
+			}
 			return false;
 		}
 	}
