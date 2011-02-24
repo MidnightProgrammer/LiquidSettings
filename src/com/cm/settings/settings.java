@@ -96,14 +96,11 @@ public class settings extends PreferenceActivity {
 			
 			public boolean onPreferenceClick(Preference preference) {
 				if (ROOT) {
-					if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
-						if(isFirstTime && checkConfFiles() == false){
-							Toast.makeText(context, "Unable to find configuration files", 2000).show();
-							return false;
-						}
+					if(!(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system"))) {
+						return false;
 					}
-					if (Compcache.setAutoStart(compcachestart.isChecked())){
-						Toast.makeText(context, "Compcache autostart set on " + Boolean.toString(compcachestart.isChecked()), 2000).show();
+					if (Compcache.setAutoStart(!Compcache.autoStart())){
+						Toast.makeText(context, "Compcache autostart set on " + Boolean.toString(Compcache.autoStart()), 2000).show();
 						return true;
 					}
 					return false;

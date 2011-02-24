@@ -1,7 +1,6 @@
 package com.cm.settings;
 
 import java.io.File;
-import android.util.Log;
 
 public class Compcache {
 	
