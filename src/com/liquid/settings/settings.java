@@ -1,4 +1,4 @@
-package com.cm.settings;
+package com.liquid.settings;
 
 import java.io.File;
 import android.content.Context;
@@ -26,8 +26,8 @@ public class settings extends PreferenceActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
 		super.onCreate(savedInstanceState); 
+		Eula.show(this);
 		addPreferencesFromResource(R.menu.menu); 
-		
 		final Context context = getApplicationContext();
 		final CheckBoxPreference compcachestart = (CheckBoxPreference)findPreference("cc_run");
 		final CheckBoxPreference compcacheauto = (CheckBoxPreference)findPreference("cc_auto");

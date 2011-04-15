@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-<string name="app_name">Liquid settings</string>  
+<string name="description">LS app allow you to edit liquid\'s settings.</string>
+<string name="app_name">Liquid settings</string>
+<string name="app_vname">1.1</string>  
 <string name="vibrON">Haptic Feedback ON</string>
 <string name="vibrOFF">Haptic Feedback OFF</string>
 

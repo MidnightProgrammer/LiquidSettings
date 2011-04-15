@@ -85,6 +85,10 @@
     				android:key="ads_help"
     				android:title="Ads Filter"
     				android:summary="@string/ads_help" />
+    			<Preference
+    				android:key="version"
+    				android:title="Liquid Settings Version:"
+    				android:summary="@string/app_vname" />
     		</PreferenceCategory>
     	</PreferenceScreen>
     	
