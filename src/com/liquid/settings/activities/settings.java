@@ -14,9 +14,6 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.util.Log;
 import android.widget.Toast;
-import android.net.Uri;
-import android.content.Intent;
-
 public class settings extends PreferenceActivity { 
 	
 	public boolean ROOT = false;
@@ -27,6 +24,7 @@ public class settings extends PreferenceActivity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
+		
 		super.onCreate(savedInstanceState); 
 		Eula.show(this);
 		addPreferencesFromResource(R.menu.menu); 
@@ -35,10 +33,6 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference compcacheauto = (CheckBoxPreference)findPreference("cc_auto");
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");
 		final CheckBoxPreference ads = (CheckBoxPreference)findPreference("ads_filter");
-		final Preference donate = (Preference) findPreference("donate");
-		final Preference follow = (Preference) findPreference("follow");
-		final Preference gnufabio_twt = (Preference) findPreference("gnufabio_twt");
-		final Preference enrix_twt = (Preference) findPreference("enrix_twt");
 		
 		editNoise = (EditTextPreference)findPreference("noise");
 		editSensitivity = (EditTextPreference)findPreference("sensitivity");
@@ -74,7 +68,6 @@ public class settings extends PreferenceActivity {
         
         updateValues();
         
-        
 		compcachestart.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			public boolean onPreferenceClick(Preference preference) {
@@ -92,7 +85,6 @@ public class settings extends PreferenceActivity {
 				}	
 			}
 		});
-		
 		
 		compcacheauto.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
@@ -168,7 +160,7 @@ public class settings extends PreferenceActivity {
 			
 		});
 		
-		
+	
 		editNoise.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -241,46 +233,8 @@ public class settings extends PreferenceActivity {
 				return true;
 			}
 		});
-		
-	donate.setOnPreferenceClickListener(new OnPreferenceClickListener(){
-			public boolean onPreferenceClick(Preference preference) {
-				Uri url = Uri.parse("http://goo.gl/UBBG8"); 
-				Intent launchbrowser = new Intent(Intent.ACTION_VIEW,url);
-				startActivity(launchbrowser);
-				return true;
-			}
-	});
 	
-	follow.setOnPreferenceClickListener(new OnPreferenceClickListener(){
-		public boolean onPreferenceClick(Preference preference) {
-			Uri url = Uri.parse("http://goo.gl/TNHFJ"); 
-			Intent launchbrowser = new Intent(Intent.ACTION_VIEW,url);
-			startActivity(launchbrowser);
-			return true;
-		}
-});
-	
-	gnufabio_twt.setOnPreferenceClickListener(new OnPreferenceClickListener(){
-		public boolean onPreferenceClick(Preference preference) {
-			Uri url = Uri.parse("http://twitter.com/#!/GnuFabio"); 
-			Intent launchbrowser = new Intent(Intent.ACTION_VIEW,url);
-			startActivity(launchbrowser);
-			return true;
-		}
-});
-	
-	enrix_twt.setOnPreferenceClickListener(new OnPreferenceClickListener(){
-		public boolean onPreferenceClick(Preference preference) {
-			Uri url = Uri.parse("http://twitter.com/#!/enrix835"); 
-			Intent launchbrowser = new Intent(Intent.ACTION_VIEW,url);
-			startActivity(launchbrowser);
-			return true;
-		}
-});
-
 }
-	
-	
 	
 	
 	private void updateValues() {
