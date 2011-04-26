@@ -1,5 +1,7 @@
-package com.liquid.settings;
+package com.liquid.settings.activities;
 
+import com.liquid.settings.*;
+import com.liquid.settings.components.Eula;
 import java.io.File;
 import android.content.Context;
 import android.content.SharedPreferences;

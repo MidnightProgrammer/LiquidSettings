@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    		<PreferenceCategory
+    			android:title="Developers">
+    			<PreferenceScreen
+				android:title="Gnufabio"
+				android:summary="click tdo open Gnufabio's twitter page">
+				<intent android:action="android.intent.action.VIEW"
+					android:data="http://twitter.com/#!/GnuFabio" />
+			</PreferenceScreen>
+			<PreferenceScreen
+				android:title="Enrix835"
+				android:summary="click to open Enrix835's twitter page">
+				<intent android:action="android.intent.action.VIEW"
+					android:data="http://twitter.com/#!/enrix835" />
+			</PreferenceScreen>
+    		</PreferenceCategory>
+    		
+    		<PreferenceCategory
+    			android:title="Links">	
+    			<PreferenceScreen
+				android:title="Click to onate"
+				android:summary="to allow us to add this app to the market">
+				<intent android:action="android.intent.action.VIEW"
+					android:data="http://goo.gl/UBBG8" />
+			</PreferenceScreen>
+			<PreferenceScreen
+				android:title="Follow us"
+				android:summary="on the official thread at Liquid @ Modaco">
+				<intent android:action="android.intent.action.VIEW"
+					android:data="http://goo.gl/TNHFJ" />
+			</PreferenceScreen>
+    		</PreferenceCategory>
+    		
+    		<PreferenceCategory
+    			android:title="Help">
+    			<Preference
+    				android:key="sens_help"
+    				android:title="Sensitivity"
+    				android:summary="@string/sens_help" />
+    			<Preference
+    				android:key="hf_help"
+    				android:title="Haptic Feedback"
+    				android:summary="@string/haptic_help" />
+    			<Preference
+    				android:key="compcache_help"
+    				android:title="Compcache"
+    				android:summary="@string/compcache_help" />
+    			<Preference
+    				android:key="ads_help"
+    				android:title="Ads Filter"
+    				android:summary="@string/ads_help" />
+    		</PreferenceCategory>
+</PreferenceScreen>
+

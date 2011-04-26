@@ -30,6 +30,7 @@ public final class R {
     }
     public static final class menu {
         public static final int menu=0x7f050000;
+        public static final int menu_info=0x7f050001;
     }
     public static final class string {
         public static final int CHANGELOG=0x7f040001;

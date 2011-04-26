@@ -1,18 +1,20 @@
-package com.liquid.settings;
+package com.liquid.settings.components;
+
+import com.liquid.settings.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 
-class Eula {
+public class Eula {
 	static interface OnEulaAgreedTo {
         void onEulaAgreedTo();
     }
 
 	private static String version;
 	
-    static boolean show(final Activity activity) {
+    public static boolean show(final Activity activity) {
     	version = activity.getString(R.string.app_vname);
         final SharedPreferences preferences = activity.getSharedPreferences("LS-EULA",Activity.MODE_PRIVATE);
         if (!preferences.getBoolean("EULA-accepted-v"+version, false)) {
