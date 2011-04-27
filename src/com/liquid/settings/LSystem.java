@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.File;
 import android.widget.Toast;
 import android.content.Context;
 
@@ -61,8 +62,20 @@ public class LSystem {
 			return false;
 	}
 	
+	public static boolean hapticAvailable(){
+		if (new File("/sys/module/avr/parameters/vibr").exists()){
+			Log.d("LS-APP","Haptic feedback path available");
+			return true;
+		} else {
+			Log.d("LS-APP","Haptic feedback path unavailable, is it a stock rom?");
+			return false;
+		}
+	}
+	
 	public static boolean vibrStatus() {
     	String value;
+    	if (!hapticAvailable())
+    		return false;
     	try {
         	FileReader input = new FileReader("/sys/module/avr/parameters/vibr");
         	BufferedReader reader = new BufferedReader(input);

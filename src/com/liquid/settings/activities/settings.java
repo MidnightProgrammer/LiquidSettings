@@ -43,10 +43,13 @@ public class settings extends PreferenceActivity {
 			editNoise.setSummary("Noise setting not available for Liquid Metal");
 			editSensitivity.setSummary("set a value between 15 and 30");
 		}
+		if (!LSystem.hapticAvailable())
+			hf.setEnabled(false);
+		else
+			hf.setChecked(LSystem.vibrStatus());
 		
 		compcachestart.setChecked(Compcache.isCompcacheRunning());
 		compcacheauto.setChecked(Compcache.autoStart());
-		hf.setChecked(LSystem.vibrStatus());
 		ads.setChecked(Adsfilter.isFiltered());
 		
 		ROOT = LiquidSettings.isRoot();
