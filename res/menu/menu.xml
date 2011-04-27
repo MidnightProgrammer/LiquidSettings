@@ -41,6 +41,8 @@
                 android:summary="avoid ads banner" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Info">
-   	<Preference android:title="Info and help" android:key="menu_info" android:summary="about this app" />
+   		<Preference android:title="Info and help" 
+   					android:key="menu_info" 
+   					android:summary="about this app" />
     </PreferenceCategory>
 </PreferenceScreen>

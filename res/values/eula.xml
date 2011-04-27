@@ -8,6 +8,7 @@ To use this app you need ROOT permissions. This app will work only on Acer Liqui
 
 <string name="CHANGELOG">
 Changelog v 1.2:\n
-[~] Introduced compatibility for Liquid Metal (thanks vache)\n
+[~] Introduced compatibility for Liquid Metal (thanks vache).\n
+[~] Now the app check if init.d folder exists.\n
 </string>
 </resources>

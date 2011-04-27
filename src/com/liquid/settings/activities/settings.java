@@ -14,6 +14,8 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.util.Log;
 import android.widget.Toast;
+import android.content.Intent;
+
 public class settings extends PreferenceActivity { 
 	
 	public boolean ROOT = false;
@@ -25,7 +27,12 @@ public class settings extends PreferenceActivity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
+
 		super.onCreate(savedInstanceState); 
+		if (!LSystem.checkInitFolder()){
+			Toast.makeText(this, "Can't make init.d folder, your system must be rooted", 2000);
+			this.finish(); //Exit app
+		}
 		isMetal = LSystem.isLiquidMetal(this);
 		Eula.show(this);
 		addPreferencesFromResource(R.menu.menu); 
@@ -34,6 +41,7 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference compcacheauto = (CheckBoxPreference)findPreference("cc_auto");
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");
 		final CheckBoxPreference ads = (CheckBoxPreference)findPreference("ads_filter");
+		final Preference menu_info = (Preference)findPreference("menu_info");
 		
 		editNoise = (EditTextPreference)findPreference("noise");
 		editSensitivity = (EditTextPreference)findPreference("sensitivity");
@@ -230,9 +238,20 @@ public class settings extends PreferenceActivity {
 				return true;
 			}
 		});
-	
+		
+		menu_info.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			public boolean onPreferenceClick(Preference preference) {
+				Intent myintent = new Intent (Intent.ACTION_VIEW);
+				myintent.setClassName(context, InfoPreferenceActivity.class.getName());
+				startActivity(myintent);
+				return true;
+			}
+		});
 }
 
+	
+	
 	private void updateValues() {
 		editNoise.setSummary("noise is set to " + noiseValue);
 		if (!isMetal)

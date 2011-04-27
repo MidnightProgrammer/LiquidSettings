@@ -48,6 +48,7 @@ public final class R {
         public static final int description=0x7f040006;
         public static final int haptic_help=0x7f040018;
         public static final int hosts=0x7f040005;
+        public static final int init_help=0x7f04001b;
         public static final int mt_sens_device=0x7f040000;
         public static final int noise=0x7f04000c;
         public static final int noiseandsetsumm=0x7f040016;

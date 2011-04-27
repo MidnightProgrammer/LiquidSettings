@@ -36,6 +36,10 @@
     		<PreferenceCategory
     			android:title="Help">
     			<Preference
+    				android:key="init_help"
+    				android:title="Init.d support"
+    				android:summary="@string/init_help" />
+    			<Preference
     				android:key="sens_help"
     				android:title="Sensitivity"
     				android:summary="@string/sens_help" />
@@ -53,4 +57,3 @@
     				android:summary="@string/ads_help" />
     		</PreferenceCategory>
 </PreferenceScreen>
-

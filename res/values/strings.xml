@@ -22,6 +22,6 @@
 <string name="haptic_help">Haptic feedback is the vibrate feedback issued by pressing the softkeys.</string>
 <string name="compcache_help">Compcache allows the Liquid-users to get more RAM for running apps, but it stresses the CPU,makes the device slower and the battery drain higher.</string>
 <string name="ads_help">Ads filter allows you to remove many adsense banner in the apps.</string>
-
+<string name="init_help">To use LS autostart scripts your rom must support init.d scripts. Else you\'ll have to set your preferences at each boot.</string>
 </resources>
 
