@@ -48,6 +48,7 @@ public class LSystem {
             Log.e("*** ERROR ***", "Unable to read mod version.");
             return "";
 		}
+		Log.d("**LS**","Find this product.model in build.prop: " + product);
 		return product;
 	}
 	
