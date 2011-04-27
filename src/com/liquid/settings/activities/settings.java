@@ -1,8 +1,8 @@
 package com.liquid.settings.activities;
 
 import com.liquid.settings.*;
+import com.liquid.settings.LSystem;
 import com.liquid.settings.components.Eula;
-import java.io.File;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import android.widget.Toast;
 public class settings extends PreferenceActivity { 
 	
 	public boolean ROOT = false;
+	public boolean isMetal;
 	public boolean isFirstTime = false;
 	public SharedPreferences prefs;
 	public String noiseValue, sensitivityValue;
@@ -24,8 +25,8 @@ public class settings extends PreferenceActivity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
-		
 		super.onCreate(savedInstanceState); 
+		isMetal = LSystem.isLiquidMetal(this);
 		Eula.show(this);
 		addPreferencesFromResource(R.menu.menu); 
 		final Context context = getApplicationContext();
@@ -37,17 +38,23 @@ public class settings extends PreferenceActivity {
 		editNoise = (EditTextPreference)findPreference("noise");
 		editSensitivity = (EditTextPreference)findPreference("sensitivity");
 		
+		if (isMetal){
+			editNoise.setEnabled(false);
+			editNoise.setSummary("Noise setting not available for Liquid Metal");
+			editSensitivity.setSummary("set a value between 15 and 30");
+		}
+		
 		compcachestart.setChecked(Compcache.isCompcacheRunning());
 		compcacheauto.setChecked(Compcache.autoStart());
-		hf.setChecked(LiquidSettings.vibrStatus());
+		hf.setChecked(LSystem.vibrStatus());
 		ads.setChecked(Adsfilter.isFiltered());
 		
 		ROOT = LiquidSettings.isRoot();
 		noiseValue = editNoise.getText();
 		sensitivityValue = editSensitivity.getText();
 		
-		if(LiquidSettings.getModVersion().contains("CyanogenMod"))  {
-        	Log.i("*** DEBUG ***", "you're running CyanogenMod");
+		if(LSystem.getModVersion().contains("CyanogenMod"))  {
+        	Log.i("*** DEBUG ***", "You're running CyanogenMod");
         	Toast.makeText(this,"You are using a CM ROM. We suggest you to use the CM settings app for the Compcache",6000).show();
         	compcacheauto.setEnabled(false);
         	compcachestart.setEnabled(false);
@@ -57,14 +64,6 @@ public class settings extends PreferenceActivity {
 			compcacheauto.setEnabled(false);
 			compcachestart.setEnabled(false);
 		}
-		
-        prefs = getSharedPreferences("liquid-settings-pref", 0);
-        if(prefs.getBoolean("firstrun", true)) {
-        	isFirstTime = true;
-        	SharedPreferences.Editor edit = prefs.edit();
-        	edit.putBoolean("firstrun", false);
-        	edit.commit();
-        }
         
         updateValues();
         
@@ -90,13 +89,15 @@ public class settings extends PreferenceActivity {
 			
 			public boolean onPreferenceClick(Preference preference) {
 				if (ROOT) {
-					if(!(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system"))) {
+					if(!(LSystem.RemountRW())) {
 						return false;
 					}
 					if (Compcache.setAutoStart(!Compcache.autoStart())){
+						LSystem.RemountROnly();
 						Toast.makeText(context, "Compcache autostart set on " + Boolean.toString(Compcache.autoStart()), 2000).show();
 						return true;
 					}
+					LSystem.RemountROnly();
 					return false;
 				} else{
 					Toast.makeText(context, "Sorry, you need ROOT permissions",	2000).show();
@@ -110,11 +111,11 @@ public class settings extends PreferenceActivity {
 
 			public boolean onPreferenceClick(Preference preference) {
 				if(ROOT){
-						if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
+						if(LSystem.RemountRW()) {
 							LiquidSettings.runRootCommand("echo " + ((hf.isChecked()) ? Strings.getvibr() : Strings.getnovibr()) + " > /system/etc/init.d/06vibrate");
 							LiquidSettings.runRootCommand("echo " + ((hf.isChecked()==true) ? "1": "0") +" > /sys/module/avr/parameters/vibr");
 							LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06vibrate");
-							LiquidSettings.runRootCommand("mount -o ro,remount -t yaffs2 /dev/block/mtdblock1 /system");
+							LSystem.RemountROnly();
 							Toast.makeText(context, "Haptic set on " + Boolean.toString(hf.isChecked()), 1500).show();
 						} else {
 							Toast.makeText(context, "Error: unable to mount partition", 2000);
@@ -133,7 +134,7 @@ public class settings extends PreferenceActivity {
 		ads.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
-				if (ROOT) {
+				if (ROOT && LSystem.RemountRW()) {
 					if(!ads.isChecked()) {
 						if (Adsfilter.isFiltered()){
 							if (Adsfilter.restoreHostsFile()) {
@@ -151,6 +152,7 @@ public class settings extends PreferenceActivity {
 							ads.setChecked(false);
 						}
 					}
+					LSystem.RemountROnly();
 				} else {
 					Toast.makeText(context, "Sorry, you need ROOT permissions.", 2000).show();
 					ads.setChecked(false);
@@ -176,19 +178,15 @@ public class settings extends PreferenceActivity {
 					noiseValue = "75";
 
 				if(ROOT) {
-					if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
-						if(isFirstTime && checkConfFiles() == false) {
-							Toast.makeText(context, "Error, unable to find configuration files.", 2000).show();
-						} else {
-							LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue)+" > /system/etc/init.d/06sensitivity");
+					if(ROOT && LSystem.RemountRW()) {
+							LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, isMetal)+" > /system/etc/init.d/06sensitivity");
 							LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
-							LiquidSettings.runRootCommand("mount -o ro,remount -t yaffs2 /dev/block/mtdblock1 /system");
+							LSystem.RemountROnly();
 							if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
 								Toast.makeText(context, "Sensitivity set correctly", 1750).show();
 							else 
 								Toast.makeText(context, "Error, unable to set noise", 2000).show();
 						}
-					}
 					updateValues();
 				} else {
 					Toast.makeText(context, "Sorry, you need ROOT permissions.", 2000).show();
@@ -207,24 +205,20 @@ public class settings extends PreferenceActivity {
 				} //Check if the value is numeric, THEN assign it to sensitivityValue
 				sensitivityValue = newValue.toString();
 				int sensitivityValueInt = Integer.parseInt(sensitivityValue);
-				if(sensitivityValueInt < 20)
-					sensitivityValue = "20";
-				else if (sensitivityValueInt>75)
-					sensitivityValue="75";
+				if(sensitivityValueInt < (isMetal ? 15 : 20))
+					sensitivityValue = (isMetal ? "15" : "20");
+				else if (sensitivityValueInt>(isMetal ? 30 : 75))
+					sensitivityValue=(isMetal ? "30" : "75");
 				
 				if(ROOT) {
-					if(LiquidSettings.runRootCommand("mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /system")) {
-						if(isFirstTime && checkConfFiles() == false) {
-							Toast.makeText(context, "Error, unable to find configuration files.", 2000).show();
-						} else {
-							LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue)+" > /system/etc/init.d/06sensitivity");
-							LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
-							LiquidSettings.runRootCommand("mount -o ro,remount -t yaffs2 /dev/block/mtdblock1 /system");
-							if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
-								Toast.makeText(context, "Sensitivity set correctly", 1750).show();
-							else 
-								Toast.makeText(context, "Error, unable to set sensitivity", 2000).show();
-						}
+					if(ROOT && LSystem.RemountRW()) {
+						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, isMetal)+" > /system/etc/init.d/06sensitivity");
+						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
+						LSystem.RemountROnly();
+						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
+							Toast.makeText(context, "Sensitivity set correctly", 1750).show();
+						else 
+							Toast.makeText(context, "Error, unable to set sensitivity", 2000).show();
 					}
 					updateValues();
 				} else {
@@ -235,25 +229,11 @@ public class settings extends PreferenceActivity {
 		});
 	
 }
-	
-	
+
 	private void updateValues() {
 		editNoise.setSummary("noise is set to " + noiseValue);
-		editSensitivity.setSummary("sensitivity is set to " + sensitivityValue);
+		if (!isMetal)
+			editSensitivity.setSummary("sensitivity is set to " + sensitivityValue);
 	}
 	
-	
-	private boolean checkConfFiles() {
-    	isFirstTime = false;
-    	Toast.makeText(this, "Checking if you can run this application...", 4000).show();
-		if((new File("/system/etc/init.d/06vibrate").exists() == false) && (new File("/sys/module/avr/parameters/vibr")).exists() == false) {
-			Toast.makeText(this, "Unable to find configuration files", 2000).show();
-			return false;
-		}
-		if (Compcache.filesExist() == false){
-			Toast.makeText(this, "You must use a kernel which supports compcache!",2500).show();
-			return false;
-		}
-		return true;
-    }
 }
