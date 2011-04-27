@@ -26,8 +26,8 @@ public class Strings {
 	            "\"#!/system/bin/sh",
 	            "#script created by Liquid Settings App",
 	            "#",
-	            metal ? ("echo "+sens+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/sensitivity") : ("echo "+sens+" > /sys/devices/platform/i2c-adapter/i2c-0/0-004d/sensitivity"),
-	            metal ? ("echo "+noise+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/noise\"") : "# There is no noise for Liquid MT\""
+	            metal ? ("echo "+sens+" > /sys/devices/platform/i2c-adapter/i2c-0/0-004d/sensitivity") : ("echo "+sens+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/sensitivity"),
+	            metal ? ("# There is no noise for Liquid MT\"") : ("echo "+noise+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/noise\"")
 	        );
 	}
 	

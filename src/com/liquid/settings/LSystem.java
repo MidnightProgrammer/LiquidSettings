@@ -48,13 +48,13 @@ public class LSystem {
             Log.e("*** ERROR ***", "Unable to read mod version.");
             return "";
 		}
-		Log.d("**LS**","Find this product.model in build.prop: " + product);
+		Log.d("LS-APP","Find this product.model in build.prop: " + product);
 		return product;
 	}
 	
 	public static boolean isLiquidMetal(Context context){
 		String product = getProduct();
-		if (product.equalsIgnoreCase("Liquid MT")){
+		if (product.equalsIgnoreCase("Liquid MT") || product.equalsIgnoreCase("Liquid Metal")){
 			Toast.makeText(context, "Liquid Metal detected", 1000).show();
 			return true;
 		}else
