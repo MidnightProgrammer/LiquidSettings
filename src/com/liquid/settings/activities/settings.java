@@ -15,14 +15,39 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.util.Log;
 import android.widget.Toast;
 import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 public class settings extends PreferenceActivity { 
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.inflatedmenu, menu);
+	    return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	    case R.id.menu_help:
+			startActivity(new Intent (Intent.ACTION_VIEW).setClassName(this, InfoPreferenceActivity.class.getName()));
+			return true;
+	    case R.id.menu_close:
+	        this.finish();
+	        return true;
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
+	}
 	
 	public boolean ROOT = false;
 	public boolean isMetal;
 	public boolean isFirstTime = false;
 	public SharedPreferences prefs;
 	public String noiseValue, sensitivityValue;
+	public int SDCacheSize;
 	EditTextPreference editNoise, editSensitivity;
 	
 	@Override
@@ -41,6 +66,7 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference compcacheauto = (CheckBoxPreference)findPreference("cc_auto");
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");
 		final CheckBoxPreference ads = (CheckBoxPreference)findPreference("ads_filter");
+		final EditTextPreference sdcache = (EditTextPreference)findPreference("sdcache");
 		final Preference menu_info = (Preference)findPreference("menu_info");
 		
 		editNoise = (EditTextPreference)findPreference("noise");
@@ -59,6 +85,12 @@ public class settings extends PreferenceActivity {
 		compcachestart.setChecked(Compcache.isCompcacheRunning());
 		compcacheauto.setChecked(Compcache.autoStart());
 		ads.setChecked(Adsfilter.isFiltered());
+		
+		if (!SdCache.isCachePathAvailable())
+			sdcache.setEnabled(false);
+		if ((SDCacheSize=SdCache.getSdCacheSize()) >= 128){
+			sdcache.setText(Integer.toString(SDCacheSize));
+		}
 		
 		ROOT = LiquidSettings.isRoot();
 		noiseValue = editNoise.getText();
@@ -246,6 +278,33 @@ public class settings extends PreferenceActivity {
 				myintent.setClassName(context, InfoPreferenceActivity.class.getName());
 				startActivity(myintent);
 				return true;
+			}
+		});
+		
+		sdcache.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				if (!Strings.onlyNumber(newValue.toString())){
+					Toast.makeText(context, "You must enter a numeric value!", 2000).show();
+					return false;
+				} //Check if the value is numeric, THEN assign it to sensitivityValue
+				String newValueString = newValue.toString();
+				int newValueInt = Integer.parseInt(newValueString);
+				if(newValueInt < 128)
+					newValueInt = 128;
+				else if (newValueInt > 4096)
+					newValueInt = 4096;
+				if (ROOT){
+					if (SdCache.setSDCache(newValueInt)){
+						Toast.makeText(context, "SD cache size set to " + newValueInt, 1500).show();
+						return true;
+					}else{
+						Toast.makeText(context, "Error while setting SD Cache", 1500).show();
+						return false;
+					}
+				} else 
+					Toast.makeText(context, "Sorry you need root permissions", 2000);
+				return false;
 			}
 		});
 }

@@ -20,7 +20,7 @@
     		<PreferenceCategory
     			android:title="Links">	
     			<PreferenceScreen
-				android:title="Click to onate"
+				android:title="Click to Donate"
 				android:summary="to allow us to add this app to the market">
 				<intent android:action="android.intent.action.VIEW"
 					android:data="http://goo.gl/UBBG8" />
@@ -55,5 +55,15 @@
     				android:key="ads_help"
     				android:title="Ads Filter"
     				android:summary="@string/ads_help" />
+    			<Preference
+    				android:key="cache_sd_help"
+    				android:title="SD Cache"
+    				android:summary="@string/sdcache_help" />
     		</PreferenceCategory>
+    	<PreferenceCategory android:title="Version">
+    		<Preference
+    				android:key="version"
+    				android:title="Liquid Settings version:"
+    				android:summary="@string/app_vname" />			
+    	</PreferenceCategory>
 </PreferenceScreen>

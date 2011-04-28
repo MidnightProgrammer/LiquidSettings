@@ -33,10 +33,20 @@ public class Strings {
 	
 	public static String getCompcacheAutostart(){
 		return String.format("%s\n%s\n%s\n%s","\"#!/system/bin/sh",
-				"#script created by liquid custom settings",
+				"#script created by Liquid Settings App",
 				"#",
 				"compcache start\""
 				);
+	}
+	
+	public static String getSdCacheSizeString(int size){
+		return String.format("\"%s\n%s\n\n%s\n%s\n%s\n\"",
+				"#!/system/bin/sh",
+				"#script created by Liquid Settings App",
+				"if [ -e /sys/devices/virtual/bdi/179:0/read_ahead_kb ]; then ",
+				"/system/xbin/echo \\\"" + size + "\\\" > /sys/devices/virtual/bdi/179:0/read_ahead_kb;",
+				"fi;"
+		);
 	}
 	
 	public static boolean onlyNumber(String str){

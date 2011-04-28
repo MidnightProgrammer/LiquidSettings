@@ -10,5 +10,7 @@ To use this app you need ROOT permissions. This app will work only on Acer Liqui
 Changelog v 1.2:\n
 [~] Introduced compatibility for Liquid Metal (thanks vache).\n
 [~] Now the app check if init.d folder exists.\n
+[~] New SD Cache function: you can improve SD speed increasing the cache size.\n
+[~] Added Option Menu, now you can easily close the app.
 </string>
 </resources>

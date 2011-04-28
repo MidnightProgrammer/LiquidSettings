@@ -35,6 +35,13 @@
                 android:key="hf"
                 android:title="Haptic feedback"
                 android:summary="softkey vibration" />
+        <EditTextPreference 
+			android:key="sdcache" 
+			android:title="Set sd cache size"
+        	android:summary="@string/sdcachesum"
+        	android:numeric="integer"
+        	android:inputType="number"
+			android:defaultValue="2048"/>
 	<CheckBoxPreference
                 android:key="ads_filter"
                 android:title="Ads filter"
