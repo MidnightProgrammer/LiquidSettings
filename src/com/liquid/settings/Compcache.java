@@ -10,10 +10,17 @@ public class Compcache {
 	
 	public static boolean setAutoStart(boolean opt){
 		try{
-			if(opt == true)
-				return (LSystem.RemountRW() & LiquidSettings.runRootCommand("echo " + Strings.getCompcacheAutostart() + " > /etc/init.d/06compcache") && LiquidSettings.runRootCommand("chmod +x /etc/init.d/06compcache") && LSystem.RemountROnly());
-			else
-				return (LSystem.RemountRW() && LiquidSettings.runRootCommand("rm /etc/init.d/06compcache") && LSystem.RemountROnly());
+			if(opt == true){
+				if (LiquidSettings.runRootCommand("echo " + Strings.getCompcacheAutostart() + " > /etc/init.d/06compcache") && LiquidSettings.runRootCommand("chmod +x /etc/init.d/06compcache"))
+					return true;
+				else 
+					return false;
+			} else {
+				if (LiquidSettings.runRootCommand("rm /etc/init.d/06compcache"))
+					return true;
+				else 
+					return false;
+			}
 		} catch (Exception e){}
 		return false;
 	}
