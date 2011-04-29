@@ -1,8 +1,9 @@
 package com.liquid.settings.activities;
 
 import com.liquid.settings.*;
-import com.liquid.settings.LSystem;
 import com.liquid.settings.components.Eula;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,7 +30,6 @@ public class settings extends PreferenceActivity {
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
 	    switch (item.getItemId()) {
 	    case R.id.menu_help:
 			startActivity(new Intent (Intent.ACTION_VIEW).setClassName(this, InfoPreferenceActivity.class.getName()));
@@ -48,7 +48,6 @@ public class settings extends PreferenceActivity {
 	public SharedPreferences prefs;
 	public String noiseValue, sensitivityValue;
 	public int SDCacheSize;
-	EditTextPreference editNoise, editSensitivity;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
@@ -61,6 +60,7 @@ public class settings extends PreferenceActivity {
 		isMetal = LSystem.isLiquidMetal(this);
 		Eula.show(this);
 		addPreferencesFromResource(R.menu.menu); 
+		
 		final Context context = getApplicationContext();
 		final CheckBoxPreference compcachestart = (CheckBoxPreference)findPreference("cc_run");
 		final CheckBoxPreference compcacheauto = (CheckBoxPreference)findPreference("cc_auto");
@@ -68,9 +68,8 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference ads = (CheckBoxPreference)findPreference("ads_filter");
 		final EditTextPreference sdcache = (EditTextPreference)findPreference("sdcache");
 		final Preference menu_info = (Preference)findPreference("menu_info");
-		
-		editNoise = (EditTextPreference)findPreference("noise");
-		editSensitivity = (EditTextPreference)findPreference("sensitivity");
+		final EditTextPreference editNoise = (EditTextPreference)findPreference("noise");
+		final EditTextPreference editSensitivity = (EditTextPreference)findPreference("sensitivity");
 		
 		if (isMetal){
 			editNoise.setEnabled(false);
@@ -93,8 +92,6 @@ public class settings extends PreferenceActivity {
 		}
 		
 		ROOT = LiquidSettings.isRoot();
-		noiseValue = editNoise.getText();
-		sensitivityValue = editSensitivity.getText();
 		
 		if(LSystem.getModVersion().contains("CyanogenMod"))  {
         	Log.i("*** DEBUG ***", "You're running CyanogenMod");
@@ -108,8 +105,10 @@ public class settings extends PreferenceActivity {
 			compcachestart.setEnabled(false);
 		}
         
-        updateValues();
-        
+		final SharedPreferences preferences = context.getSharedPreferences("LS-APP",Activity.MODE_WORLD_READABLE);
+		editNoise.setText(Integer.toString(preferences.getInt("noise", 50)));
+		editSensitivity.setText(Integer.toString(preferences.getInt("sensitivity", 25)));
+		
 		compcachestart.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			public boolean onPreferenceClick(Preference preference) {
@@ -225,15 +224,17 @@ public class settings extends PreferenceActivity {
 							LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, isMetal)+" > /system/etc/init.d/06sensitivity");
 							LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 							LSystem.RemountROnly();
-							if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
+							if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity")){
 								Toast.makeText(context, "Sensitivity set correctly", 1750).show();
-							else 
+								preferences.edit().putInt("noise", noiseValueInt).commit();
+								editNoise.setText(Integer.toString(noiseValueInt));
+							} else 
 								Toast.makeText(context, "Error, unable to set noise", 2000).show();
 						}
-					updateValues();
 				} else {
 					Toast.makeText(context, "Sorry, you need ROOT permissions.", 2000).show();
 				}
+				
 				return true;
 			}
 		});
@@ -258,12 +259,13 @@ public class settings extends PreferenceActivity {
 						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, isMetal)+" > /system/etc/init.d/06sensitivity");
 						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 						LSystem.RemountROnly();
-						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
+						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity")){
+							preferences.edit().putInt("sensitivity", sensitivityValueInt).commit();
 							Toast.makeText(context, "Sensitivity set correctly", 1750).show();
-						else 
+							editSensitivity.setText(Integer.toString(sensitivityValueInt));
+						} else 
 							Toast.makeText(context, "Error, unable to set sensitivity", 2000).show();
 					}
-					updateValues();
 				} else {
 					Toast.makeText(context, "Sorry, you need ROOT permissions.", 2000).show();
 				}
@@ -307,14 +309,5 @@ public class settings extends PreferenceActivity {
 				return false;
 			}
 		});
-}
-
-	
-	
-	private void updateValues() {
-		editNoise.setSummary("noise is set to " + noiseValue);
-		if (!isMetal)
-			editSensitivity.setSummary("sensitivity is set to " + sensitivityValue);
 	}
-	
 }
