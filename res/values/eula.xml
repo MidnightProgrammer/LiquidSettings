@@ -7,15 +7,7 @@ To use this app you need ROOT permissions. This app will work only on Acer Liqui
 </string>
 
 <string name="CHANGELOG">
-<<<<<<< HEAD
 Changelog v 1.2:\n
 [~] Introduced overclock
-=======
-Changelog v 1.1 (minor update):\n
-[~] Added changelog.
-[~] Added LS on market.
-
-[!] This is the latest version based on the actual 1.0 stable tree.
->>>>>>> parent of 309881e... Updated sources. Added EULA dialog. This will be the last version based on actual 1.0.x stable tree. NOTE: REMEMBER TO UPDATE CHANGELOG AND APP_VNAME STRINGS!
 </string>
 </resources>
