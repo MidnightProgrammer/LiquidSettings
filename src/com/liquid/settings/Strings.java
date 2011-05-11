@@ -1,5 +1,8 @@
 package com.liquid.settings;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 import android.util.Log;
 
 public class Strings {
@@ -21,22 +24,32 @@ public class Strings {
 	        );	
 		}
 	
-	public static String getSens(String sens, String noise){
+	public static String getSens(String sens, String noise, boolean metal){
 		return String.format("%s\n%s\n%s\n%s\n%s", 
 	            "\"#!/system/bin/sh",
-	            "#script created by liquid custom settings",
+	            "#script created by Liquid Settings App",
 	            "#",
-	            "echo "+sens+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/sensitivity",
-	            "echo "+noise+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/noise\""
+	            metal ? ("echo "+sens+" > /sys/devices/platform/i2c-adapter/i2c-0/0-004d/sensitivity") : ("echo "+sens+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/sensitivity"),
+	            metal ? ("# There is no noise for Liquid MT\"") : ("echo "+noise+" > /sys/devices/platform/i2c-adapter/i2c-0/0-005c/noise\"")
 	        );
 	}
 	
 	public static String getCompcacheAutostart(){
 		return String.format("%s\n%s\n%s\n%s","\"#!/system/bin/sh",
-				"#script created by liquid custom settings",
+				"#script created by Liquid Settings App",
 				"#",
 				"compcache start\""
 				);
+	}
+	
+	public static String getSdCacheSizeString(int size){
+		return String.format("\"%s\n%s\n\n%s\n%s\n%s\n\"",
+				"#!/system/bin/sh",
+				"#script created by Liquid Settings App",
+				"if [ -e /sys/devices/virtual/bdi/179:0/read_ahead_kb ]; then ",
+				"/system/xbin/echo \\\"" + size + "\\\" > /sys/devices/virtual/bdi/179:0/read_ahead_kb;",
+				"fi;"
+		);
 	}
 	
 	public static boolean onlyNumber(String str){
@@ -48,4 +61,6 @@ public class Strings {
 			return false;
 		}
 	}
+
 }
+

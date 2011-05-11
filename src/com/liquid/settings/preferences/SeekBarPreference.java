@@ -1,4 +1,4 @@
-package com.liquid.settings;
+package com.liquid.settings.preferences;
 
 import android.content.Context;
 import android.graphics.Typeface;

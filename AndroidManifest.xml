@@ -8,14 +8,21 @@
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:persistent="true" 
     			android:allowTaskReparenting="true" android:testOnly="false" android:vmSafeMode="false" android:hasCode="true" android:killAfterRestore="false" android:description="@string/description" android:restoreAnyVersion="true" android:restoreNeedsApplication="false" android:allowBackup="false" android:allowClearUserData="false" android:enabled="true" android:debuggable="false">
         
-        <activity android:name=".settings"
+        <activity android:name=".activities.settings"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-		<activity android:name=".Sensitivity"
-			 	  android:label="Set touchscreen sensitivity" />
-    </application>
+       
+        <activity class=".InfoPreferenceActivity"
+		android:name=".activities.InfoPreferenceActivity"
+        android:label="Information and documentation" />
+ 		
+ 		<activity class=".OverClockActivity"
+		android:name=".activities.OverClockActivity"
+        android:label="Overclock" />
+
+	</application>
 </manifest>
