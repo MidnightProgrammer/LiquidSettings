@@ -2,7 +2,11 @@
 <resources>
 <string name="description">LS app allow you to edit liquid\'s settings.</string>
 <string name="app_name">Liquid settings</string>
+<<<<<<< HEAD
 <string name="app_vname">1.2</string>  
+=======
+<string name="app_vname">1.1</string>  
+>>>>>>> parent of 309881e... Updated sources. Added EULA dialog. This will be the last version based on actual 1.0.x stable tree. NOTE: REMEMBER TO UPDATE CHANGELOG AND APP_VNAME STRINGS!
 <string name="vibrON">Haptic Feedback ON</string>
 <string name="vibrOFF">Haptic Feedback OFF</string>
 
