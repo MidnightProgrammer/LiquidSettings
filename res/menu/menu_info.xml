@@ -5,7 +5,7 @@
     			android:title="Developers">
     			<PreferenceScreen
 				android:title="Gnufabio"
-				android:summary="click tdo open Gnufabio's twitter page">
+				android:summary="click to open Gnufabio's twitter page">
 				<intent android:action="android.intent.action.VIEW"
 					android:data="http://twitter.com/#!/GnuFabio" />
 			</PreferenceScreen>

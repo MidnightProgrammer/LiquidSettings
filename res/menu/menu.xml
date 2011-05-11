@@ -47,6 +47,9 @@
                 android:title="Ads filter"
                 android:summary="avoid ads banner" />
     </PreferenceCategory>
+    <Preference android:title="Overclock"
+    			android:key="overclock"
+    			android:summary="Set overclock" />
     <PreferenceCategory android:title="Info">
    		<Preference android:title="Info and help" 
    					android:key="menu_info" 

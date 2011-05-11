@@ -1,5 +1,8 @@
 package com.liquid.settings;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 import android.util.Log;
 
 public class Strings {
@@ -58,4 +61,6 @@ public class Strings {
 			return false;
 		}
 	}
+
 }
+

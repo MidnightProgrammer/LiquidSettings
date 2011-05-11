@@ -15,9 +15,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+       
         <activity class=".InfoPreferenceActivity"
 		android:name=".activities.InfoPreferenceActivity"
-                  android:label="Information and documentation">
-	</activity>
+        android:label="Information and documentation" />
+ 		
+ 		<activity class=".OverClockActivity"
+		android:name=".activities.OverClockActivity"
+        android:label="Overclock" />
+
 	</application>
 </manifest>

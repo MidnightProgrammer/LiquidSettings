@@ -67,7 +67,8 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");
 		final CheckBoxPreference ads = (CheckBoxPreference)findPreference("ads_filter");
 		final EditTextPreference sdcache = (EditTextPreference)findPreference("sdcache");
-		final Preference menu_info = (Preference)findPreference("menu_info");
+		final Preference menu_info = findPreference("menu_info");
+		final Preference overclock = findPreference ("overclock");
 		
 		editNoise = (EditTextPreference)findPreference("noise");
 		editSensitivity = (EditTextPreference)findPreference("sensitivity");
@@ -276,6 +277,16 @@ public class settings extends PreferenceActivity {
 			public boolean onPreferenceClick(Preference preference) {
 				Intent myintent = new Intent (Intent.ACTION_VIEW);
 				myintent.setClassName(context, InfoPreferenceActivity.class.getName());
+				startActivity(myintent);
+				return true;
+			}
+		});
+		
+		overclock.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			public boolean onPreferenceClick(Preference preference) {
+				Intent myintent = new Intent (Intent.ACTION_VIEW);
+				myintent.setClassName(context, OverClockActivity.class.getName());
 				startActivity(myintent);
 				return true;
 			}
