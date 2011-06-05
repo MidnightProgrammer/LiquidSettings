@@ -19,10 +19,6 @@
         <activity class=".InfoPreferenceActivity"
 		android:name=".activities.InfoPreferenceActivity"
         android:label="Information and documentation" />
- 		
- 		<activity class=".OverClockActivity"
-		android:name="activities.OverClockActivity"
-        android:label="Overclock" />
 
 		<service android:enabled="true" android:name=".components.BottomLED_service" />            
 		<receiver android:name=".components.BootReceiver">  

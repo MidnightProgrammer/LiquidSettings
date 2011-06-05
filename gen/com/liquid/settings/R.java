@@ -11,9 +11,7 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int bg_widget=0x7f020000;
-        public static final int bg_widget_big=0x7f020001;
-        public static final int icon=0x7f020002;
+        public static final int icon=0x7f020000;
     }
     public static final class id {
         public static final int LinearLayout01=0x7f060001;
@@ -36,7 +34,6 @@ public final class R {
         public static final int inflatedmenu=0x7f050000;
         public static final int menu=0x7f050001;
         public static final int menu_info=0x7f050002;
-        public static final int overclock_menu=0x7f050003;
     }
     public static final class string {
         public static final int CHANGELOG=0x7f040004;
