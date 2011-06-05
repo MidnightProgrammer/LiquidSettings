@@ -1,9 +1,7 @@
 package com.liquid.settings;
 
 import android.util.Log;
-
 public class BatteryLED {
-
 	public static boolean setdisable(boolean opt){
 		try{
 			if(opt)
