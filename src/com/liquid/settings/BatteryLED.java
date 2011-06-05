@@ -9,7 +9,7 @@ public class BatteryLED {
 			if(opt)
 				return (LSystem.RemountRW() & LiquidSettings.runRootCommand("echo " + Strings.batteryleddisable() + " > /etc/init.d/10batteryled") && LiquidSettings.runRootCommand("chmod +x /etc/init.d/10batteryled") && LSystem.RemountROnly());
 			else
-				return (LSystem.RemountRW() && LiquidSettings.runRootCommand("rm /etc/init.d/10batteryled") && LiquidSettings.runRootCommand("echo '1' > /sys/class/leds2/power") && LiquidSettings.runRootCommand("chmod 777 /sys/class/leds2/power") && LSystem.RemountROnly());
+				return (LSystem.RemountRW() && LiquidSettings.runRootCommand("rm /etc/init.d/10batteryled") && LSystem.RemountROnly());
 		} catch (Exception e){
 			Log.e("LS-APP", e.getMessage());
 		}
