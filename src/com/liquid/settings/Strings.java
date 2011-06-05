@@ -59,5 +59,15 @@ public class Strings {
 		}
 	}
 
+	public static String batteryleddisable(){
+		return String.format("%s\n%s\n%s\n%s\n%s", 
+	            "\"#!/system/bin/sh",
+	            "#script created by liquid custom settings",
+	            "#",
+	            "echo '0' > /sys/class/leds2/power",
+	            "chmod 000 /sys/class/leds2/power\""
+	        );
+	}	
+
 }
 

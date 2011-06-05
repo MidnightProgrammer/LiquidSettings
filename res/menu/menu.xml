@@ -47,9 +47,15 @@
                 android:title="Ads filter"
                 android:summary="avoid ads banner" />
     </PreferenceCategory>
-    <Preference android:title="Overclock"
-    			android:key="overclock"
-    			android:summary="Set overclock" />
+    
+   	<CheckBoxPreference
+                android:key="powerled"
+                android:title="Disable Power LED"
+                android:summary="Disable Power LED while charging" />
+   	<CheckBoxPreference
+                android:key="bottomled"
+                android:title="Use softkey LED"
+                android:summary="Use softkey LED as New SMS LED" />                
     <PreferenceCategory android:title="Info">
    		<Preference android:title="Info and help" 
    					android:key="menu_info" 
