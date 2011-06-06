@@ -19,12 +19,8 @@
         <activity class=".InfoPreferenceActivity"
 		android:name=".activities.InfoPreferenceActivity"
         android:label="Information and documentation" />
- 		
- 		<activity class=".OverClockActivity"
-		android:name="activities.OverClockActivity"
-        android:label="Overclock" />
 
-		<service android:enabled="true" android:name=".components.BottomLED_service" />            
+		<service android:enabled="true" android:name=".components.SmsLED_service" />            
 		<receiver android:name=".components.BootReceiver">  
     		<intent-filter>  
         		<action android:name="android.intent.action.BOOT_COMPLETED" />  
@@ -42,5 +38,5 @@
         <uses-permission android:name="android.permission.WAKE_LOCK"/>
         <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
         <uses-permission android:name="android.permission.READ_SMS" />
-        <uses-permission android:name="android.permission.READ_CONTACTS"/>
+        <uses-permission android:name="android.permission.RECEIVE_SMS" />
 </manifest>

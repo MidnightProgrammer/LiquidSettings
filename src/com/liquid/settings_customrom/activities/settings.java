@@ -1,7 +1,7 @@
 package com.liquid.settings_customrom.activities;
 
 import com.liquid.settings_customrom.*;
-import com.liquid.settings_customrom.components.BottomLED_service;
+import com.liquid.settings_customrom.components.SmsLED_service;
 import com.liquid.settings_customrom.components.Eula;
 
 import android.content.Context;
@@ -64,9 +64,9 @@ public class settings extends PreferenceActivity {
 			this.finish(); //Exit app
 		}		
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    	if(prefs.getBoolean("bottomled", false)){                
-        	Intent bottomledservice = new Intent(this, BottomLED_service.class);
-        	this.startService(bottomledservice);
+    	if(prefs.getBoolean("fixled", false)){                
+        	Intent smsledservice = new Intent(this, SmsLED_service.class);
+        	this.startService(smsledservice);
     	}
   		
 		Eula.show(this);
@@ -75,7 +75,7 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");
 		final EditTextPreference sdcache = (EditTextPreference)findPreference("sdcache");
 		final CheckBoxPreference powerled = (CheckBoxPreference)findPreference("powerled");
-		final CheckBoxPreference bottomled = (CheckBoxPreference)findPreference("bottomled");
+		final CheckBoxPreference fixled = (CheckBoxPreference)findPreference("fixled");
 		final Preference menu_info = findPreference("menu_info");
 		
 		editNoise = (EditTextPreference)findPreference("noise");
@@ -248,12 +248,13 @@ public class settings extends PreferenceActivity {
 			}
 		});
 		
-		bottomled.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+		fixled.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			public boolean onPreferenceClick(Preference preference) {
-			if (bottomled.isChecked()) {						
-	        	Intent bottomledservice = new Intent(getBaseContext(), BottomLED_service.class);
-	        	getBaseContext().startService(bottomledservice);
+			if (fixled.isChecked()) {						
+	        	Intent smsledservice = new Intent(getBaseContext(), SmsLED_service.class);
+	        	getBaseContext().startService(smsledservice);
+	        	Toast.makeText(context, "ScreenOn on new sms is required",2000);
 				}
 			return true;
 			}

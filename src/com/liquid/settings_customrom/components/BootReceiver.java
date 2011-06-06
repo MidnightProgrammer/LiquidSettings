@@ -13,7 +13,7 @@ public class BootReceiver extends BroadcastReceiver {
             context.startService(startServiceIntent);*/
         	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         	if(prefs.getBoolean("bottomled", false)){                
-            	Intent bottomledservice = new Intent(context, BottomLED_service.class);
+            	Intent bottomledservice = new Intent(context, SmsLED_service.class);
             	context.startService(bottomledservice);
         	}
         }
