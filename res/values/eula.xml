@@ -7,9 +7,8 @@ To use this app you need ROOT permissions. This app will work only on Acer Liqui
 </string>
 
 <string name="CHANGELOG">
-Changelog v 1.3:\n
-[~] New committer: Suxsem (LSteam @ Modaco)
-[~] Added proximity sensor service
-[~] Leds costumisation
+Changelog v 1.3beta:\n
+[~] New committer: Suxsem\n
+[~] Power led on/off\n
 </string>
 </resources>

@@ -20,15 +20,7 @@
 		android:name=".activities.InfoPreferenceActivity"
         android:label="Information and documentation" />
 
-		<service android:enabled="true" android:name=".components.BottomLED_service" />            
-		<receiver android:name=".components.BootReceiver">  
-    		<intent-filter>  
-        		<action android:name="android.intent.action.BOOT_COMPLETED" />  
-    		</intent-filter>  
-		</receiver>
-		
 	</application>
-        <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
         <uses-permission android:name="android.permission.INTERNET"/>
         
 </manifest>

@@ -108,9 +108,5 @@ public class LSystem {
         	return true;
         return false;
     }
-	
-	public static boolean isLedModAvailable() {
-		return (new File("/sys/class/leds2/bottom").exists());
-	}
 
 }

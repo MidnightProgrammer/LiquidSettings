@@ -1,7 +1,6 @@
 package com.liquid.settings.activities;
 
 import com.liquid.settings.*;
-import com.liquid.settings.components.BottomLED_service;
 import com.liquid.settings.components.Eula;
 
 import android.content.Context;
@@ -11,8 +10,8 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
+
 import android.preference.Preference.OnPreferenceClickListener;
 import android.util.Log;
 import android.widget.Toast;
@@ -61,12 +60,6 @@ public class settings extends PreferenceActivity {
 			this.finish(); //Exit app
 		}
 		isMetal = LSystem.isLiquidMetal(this);
-		
-    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    	if(prefs.getBoolean("bottomled", false)){                
-        	Intent bottomledservice = new Intent(this, BottomLED_service.class);
-        	this.startService(bottomledservice);
-    	}
   		
 		Eula.show(this);
 		addPreferencesFromResource(R.menu.menu); 
@@ -76,8 +69,7 @@ public class settings extends PreferenceActivity {
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");
 		final CheckBoxPreference ads = (CheckBoxPreference)findPreference("ads_filter");
 		final EditTextPreference sdcache = (EditTextPreference)findPreference("sdcache");
-		final CheckBoxPreference powerled = (CheckBoxPreference)findPreference("powerled");
-		final CheckBoxPreference bottomled = (CheckBoxPreference)findPreference("bottomled");
+		final CheckBoxPreference powerled = (CheckBoxPreference) findPreference("powerled");
 		final Preference menu_info = findPreference("menu_info");
 		
 		editNoise = (EditTextPreference)findPreference("noise");
@@ -106,7 +98,7 @@ public class settings extends PreferenceActivity {
 		ROOT = LiquidSettings.isRoot();
 		noiseValue = editNoise.getText();
 		sensitivityValue = editSensitivity.getText();
-		
+		BatteryLED.getBatteryLevel();
 		if(LSystem.getModVersion().contains("CyanogenMod"))  {
         	Log.i("*** DEBUG ***", "You're running CyanogenMod");
         	Toast.makeText(this,"You are using a CM ROM. We suggest you to use the CM settings app for the Compcache",6000).show();
@@ -117,11 +109,6 @@ public class settings extends PreferenceActivity {
 		if (!Compcache.filesExist()){
 			compcacheauto.setEnabled(false);
 			compcachestart.setEnabled(false);
-		}
-        
-		if (!LSystem.isLedModAvailable()){
-			bottomled.setEnabled(false);
-			powerled.setEnabled(false);
 		}
 		
 		
@@ -326,42 +313,20 @@ public class settings extends PreferenceActivity {
 		});
 		
 		powerled.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
 			public boolean onPreferenceClick(Preference preference) {
-				if (ROOT){
-					if (powerled.isChecked()) {						
+				if (powerled.isChecked()) {
 						LiquidSettings.runRootCommand("echo '0' > /sys/class/leds2/power");
 						LiquidSettings.runRootCommand("chmod 000 /sys/class/leds2/power");
-					}else{
+					}else{						
 						LiquidSettings.runRootCommand("chmod 222 /sys/class/leds2/power");
 					}
-					if (BatteryLED.setdisable(powerled.isChecked())){						
-						return true;
-					} else{
-						Toast.makeText(context, "Error while set Power LED disable", 2000).show();
-						return false;
-					}
-				}else {
-						Toast.makeText(context, "Sorry, you need ROOT permissions", 2000);
-						return false;
-				}	
+				BatteryLED.setdisable(powerled.isChecked());
+				return true;
 			}
 		});
-		
-		bottomled.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
-			public boolean onPreferenceClick(Preference preference) {
-			if (bottomled.isChecked()) {						
-	        	Intent bottomledservice = new Intent(getBaseContext(), BottomLED_service.class);
-	        	getBaseContext().startService(bottomledservice);
-				}
-			return true;
-			}
-		});
-}
+	}
+	
 
-	
-	
 	private void updateValues() {
 		editNoise.setSummary("noise is set to " + noiseValue);
 		if (!isMetal)
