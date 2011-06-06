@@ -1,6 +1,6 @@
 package com.liquid.settings_customrom.components;
 
-import com.liquid.settings.R;
+import com.liquid.settings_customrom.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -56,7 +56,7 @@ public class Eula {
 
     private static CharSequence readEula(Activity activity) {
     	StringBuilder builder=new StringBuilder();
-    	builder.append(activity.getString(R.string.EULA_ASSETS)).append('\n').append('\n').append(activity.getString(R.string.CHANGELOG));
+    	builder.append(activity.getString(R.string.EULA_ASSETS));
     	return builder;
     }
    

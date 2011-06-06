@@ -1,6 +1,7 @@
 package com.liquid.settings_customrom.activities;
 
-import com.liquid.settings.R;
+import com.liquid.settings_customrom.R;
+
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 

@@ -1,12 +1,12 @@
 package com.liquid.settings_customrom.activities;
 
-import com.liquid.settings.R;
 import com.liquid.settings_customrom.*;
 import com.liquid.settings_customrom.components.BottomLED_service;
 import com.liquid.settings_customrom.components.Eula;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -18,6 +18,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.util.Log;
 import android.widget.Toast;
 import android.content.Intent;
+import android.database.Cursor;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -46,7 +47,6 @@ public class settings extends PreferenceActivity {
 	}
 	
 	public boolean ROOT = false;
-	public boolean isMetal;
 	public boolean isFirstTime = false;
 	public SharedPreferences prefs;
 	public String noiseValue, sensitivityValue;
@@ -58,12 +58,11 @@ public class settings extends PreferenceActivity {
 
 		super.onCreate(savedInstanceState);
 		
+		
 		if (!LSystem.checkInitFolder()){
 			Toast.makeText(this, "Can't make init.d folder, your system must be rooted", 2000);
 			this.finish(); //Exit app
-		}
-		isMetal = LSystem.isLiquidMetal(this);
-		
+		}		
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	if(prefs.getBoolean("bottomled", false)){                
         	Intent bottomledservice = new Intent(this, BottomLED_service.class);
@@ -73,32 +72,20 @@ public class settings extends PreferenceActivity {
 		Eula.show(this);
 		addPreferencesFromResource(R.menu.menu); 
 		final Context context = getApplicationContext();
-		final CheckBoxPreference compcachestart = (CheckBoxPreference)findPreference("cc_run");
-		final CheckBoxPreference compcacheauto = (CheckBoxPreference)findPreference("cc_auto");
 		final CheckBoxPreference hf = (CheckBoxPreference)findPreference("hf");
-		final CheckBoxPreference ads = (CheckBoxPreference)findPreference("ads_filter");
 		final EditTextPreference sdcache = (EditTextPreference)findPreference("sdcache");
 		final CheckBoxPreference powerled = (CheckBoxPreference)findPreference("powerled");
 		final CheckBoxPreference bottomled = (CheckBoxPreference)findPreference("bottomled");
 		final Preference menu_info = findPreference("menu_info");
-		//final Preference overclock = findPreference ("overclock");
 		
 		editNoise = (EditTextPreference)findPreference("noise");
 		editSensitivity = (EditTextPreference)findPreference("sensitivity");
 		
-		if (isMetal){
-			editNoise.setEnabled(false);
-			editNoise.setSummary("Noise setting not available for Liquid Metal");
-			editSensitivity.setSummary("set a value between 15 and 30");
-		}
 		if (!LSystem.hapticAvailable())
 			hf.setEnabled(false);
 		else
 			hf.setChecked(LSystem.vibrStatus());
 		
-		compcachestart.setChecked(Compcache.isCompcacheRunning());
-		compcacheauto.setChecked(Compcache.autoStart());
-		ads.setChecked(Adsfilter.isFiltered());
 		
 		if (!SdCache.isCachePathAvailable())
 			sdcache.setEnabled(false);
@@ -109,61 +96,9 @@ public class settings extends PreferenceActivity {
 		ROOT = LiquidSettings.isRoot();
 		noiseValue = editNoise.getText();
 		sensitivityValue = editSensitivity.getText();
-		
-		if(LSystem.getModVersion().contains("CyanogenMod"))  {
-        	Log.i("*** DEBUG ***", "You're running CyanogenMod");
-        	Toast.makeText(this,"You are using a CM ROM. We suggest you to use the CM settings app for the Compcache",6000).show();
-        	compcacheauto.setEnabled(false);
-        	compcachestart.setEnabled(false);
-        }
-		
-		if (!Compcache.filesExist()){
-			compcacheauto.setEnabled(false);
-			compcachestart.setEnabled(false);
-		}
         
         updateValues();
-        
-		compcachestart.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
-			public boolean onPreferenceClick(Preference preference) {
-				if (ROOT){
-					if (Compcache.turnCompcache(compcachestart.isChecked())){
-						Toast.makeText(context, "Compcache " + ((compcachestart.isChecked()) ? "started" : "stopped"), 2000).show();
-						return true;
-					} else{
-						Toast.makeText(context, "Error while turning on/off compcache", 2000).show();
-						return false;
-					} 
-				}else {
-						Toast.makeText(context, "Sorry, you need ROOT permissions", 2000);
-						return false;
-				}	
-			}
-		});
-		
-		compcacheauto.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
-			public boolean onPreferenceClick(Preference preference) {
-				if (ROOT) {
-					if(!(LSystem.RemountRW())) {
-						return false;
-					}
-					if (Compcache.setAutoStart(!Compcache.autoStart())){
-						LSystem.RemountROnly();
-						Toast.makeText(context, "Compcache autostart set on " + Boolean.toString(Compcache.autoStart()), 2000).show();
-						return true;
-					}
-					LSystem.RemountROnly();
-					return false;
-				} else{
-					Toast.makeText(context, "Sorry, you need ROOT permissions",	2000).show();
-					return false;
-				}
-			}
-		});
-		
-		
+
 		hf.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
@@ -187,39 +122,6 @@ public class settings extends PreferenceActivity {
 		
 		});
 		
-		
-		ads.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-
-			public boolean onPreferenceClick(Preference preference) {
-				if (ROOT && LSystem.RemountRW()) {
-					if(!ads.isChecked()) {
-						if (Adsfilter.isFiltered()){
-							if (Adsfilter.restoreHostsFile()) {
-								Toast.makeText(context,"Hosts file restored",2000).show();
-							} else {
-								Toast.makeText(context,"Error restoring hosts file",2000).show();
-								ads.setChecked(false);
-							}
-						}
-					} else {
-						if (Adsfilter.apply(context)) {
-							Toast.makeText(context,"Hosts file patched",2000).show();
-						} else {
-							Toast.makeText(context,"Error patching hosts file",2000).show();
-							ads.setChecked(false);
-						}
-					}
-					LSystem.RemountROnly();
-				} else {
-					Toast.makeText(context, "Sorry, you need ROOT permissions.", 2000).show();
-					ads.setChecked(false);
-				}
-				return true;
-			}
-			
-		});
-		
-	
 		editNoise.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -236,7 +138,7 @@ public class settings extends PreferenceActivity {
 
 				if(ROOT) {
 					if(ROOT && LSystem.RemountRW()) {
-							LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, isMetal)+" > /system/etc/init.d/06sensitivity");
+							LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue)+" > /system/etc/init.d/06sensitivity");
 							LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 							LSystem.RemountROnly();
 							if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
@@ -262,14 +164,14 @@ public class settings extends PreferenceActivity {
 				} //Check if the value is numeric, THEN assign it to sensitivityValue
 				sensitivityValue = newValue.toString();
 				int sensitivityValueInt = Integer.parseInt(sensitivityValue);
-				if(sensitivityValueInt < (isMetal ? 15 : 20))
-					sensitivityValue = (isMetal ? "15" : "20");
-				else if (sensitivityValueInt>(isMetal ? 30 : 75))
-					sensitivityValue=(isMetal ? "30" : "75");
+				if(sensitivityValueInt < (20))
+					sensitivityValue = ("20");
+				else if (sensitivityValueInt>(75))
+					sensitivityValue=("75");
 				
 				if(ROOT) {
 					if(ROOT && LSystem.RemountRW()) {
-						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue, isMetal)+" > /system/etc/init.d/06sensitivity");
+						LiquidSettings.runRootCommand("echo "+Strings.getSens(sensitivityValue, noiseValue)+" > /system/etc/init.d/06sensitivity");
 						LiquidSettings.runRootCommand("chmod +x /system/etc/init.d/06sensitivity");
 						LSystem.RemountROnly();
 						if (LiquidSettings.runRootCommand("./system/etc/init.d/06sensitivity"))
@@ -295,15 +197,6 @@ public class settings extends PreferenceActivity {
 			}
 		});
 		
-		/*overclock.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-
-			public boolean onPreferenceClick(Preference preference) {
-				Intent myintent = new Intent (Intent.ACTION_VIEW);
-				myintent.setClassName(context, OverClockActivity.class.getName());
-				startActivity(myintent);
-				return true;
-			}
-		});*/
 		
 		sdcache.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
@@ -371,8 +264,6 @@ public class settings extends PreferenceActivity {
 	
 	private void updateValues() {
 		editNoise.setSummary("noise is set to " + noiseValue);
-		if (!isMetal)
-			editSensitivity.setSummary("sensitivity is set to " + sensitivityValue);
 	}
 	
 }

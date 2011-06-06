@@ -8,10 +8,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
+import android.util.Log;
 
 public class BottomLED_service extends Service {
 	SmsManager sms;
@@ -23,6 +26,24 @@ public class BottomLED_service extends Service {
         	if(prefs.getBoolean("bottomled", false)){                
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {            	
             	LiquidSettings.runRootCommand("tail /data/system/mail_led > /sys/class/leds2/bottom");
+            	
+     			/*Cursor cursor = getContentResolver().query(Uri.parse("content://sms/")
+                        , new String[]{"read",}
+                        , null //selection
+                        , null //selectionArgs
+                        , "read ASC"); //sortOrder
+
+               		if (cursor != null && cursor.moveToFirst()) {
+               		String read = cursor.getString(cursor.getColumnIndex("read"));
+               			if (read.equals("0")){
+               				LiquidSettings.runRootCommand("echo 1 > /sys/class/leds2/bottom");
+               				//LiquidSettings.runRootCommand("echo 1 > /sys/class/leds2/mail");
+               			}else{
+               				LiquidSettings.runRootCommand("echo 0 > /sys/class/leds2/bottom");
+               				//LiquidSettings.runRootCommand("echo 0 > /sys/class/leds2/mail");
+               			}
+               		}
+               		cursor.close();*/
             }
             if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
             	LiquidSettings.runRootCommand("echo '0' > /sys/class/leds2/bottom");
@@ -44,7 +65,7 @@ public class BottomLED_service extends Service {
 	}
 	public void onCreate() {
 		super.onCreate();
-		LiquidSettings.runRootCommand("echo 0 > mail_led && chmod 777 mail_led");
+		LiquidSettings.runRootCommand("echo 0 > /data/system/mail_led && chmod 777 /data/system/mail_led");
 		IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
