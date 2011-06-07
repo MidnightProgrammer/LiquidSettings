@@ -48,8 +48,8 @@
                 android:summary="avoid ads banner" />
      <CheckBoxPreference
                 android:key="powerled"
-                android:title="Disable Power LED"
-                android:summary="Disable Power LED while charging" /> 
+                android:title="Power LED"
+                android:summary="Enable/disable power LED" /> 
     </PreferenceCategory>         
     <PreferenceCategory android:title="Info">
    		<Preference android:title="Info and help" 

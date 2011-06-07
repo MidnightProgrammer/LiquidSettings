@@ -98,7 +98,7 @@ public class settings extends PreferenceActivity {
 		ROOT = LiquidSettings.isRoot();
 		noiseValue = editNoise.getText();
 		sensitivityValue = editSensitivity.getText();
-		BatteryLED.getBatteryLevel();
+
 		if(LSystem.getModVersion().contains("CyanogenMod"))  {
         	Log.i("*** DEBUG ***", "You're running CyanogenMod");
         	Toast.makeText(this,"You are using a CM ROM. We suggest you to use the CM settings app for the Compcache",6000).show();
@@ -314,13 +314,14 @@ public class settings extends PreferenceActivity {
 		
 		powerled.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
+				BatteryLED.getBatteryLevel(isMetal);
 				if (powerled.isChecked()) {
-						LiquidSettings.runRootCommand("echo '0' > /sys/class/leds2/power");
-						LiquidSettings.runRootCommand("chmod 000 /sys/class/leds2/power");
+						LiquidSettings.runRootCommand("echo '0' > " + ( isMetal ? "/sys/class/leds/power" : "/sys/class/leds2/power"));
+						LiquidSettings.runRootCommand("chmod 000 "  + ( isMetal ? "/sys/class/leds/power" : "/sys/class/leds2/power"));
 					}else{						
-						LiquidSettings.runRootCommand("chmod 222 /sys/class/leds2/power");
+						LiquidSettings.runRootCommand("chmod 222 " + (isMetal ? "/sys/class/leds/power" : "/sys/class/leds2/power"));
 					}
-				BatteryLED.setdisable(powerled.isChecked());
+				BatteryLED.setdisable(powerled.isChecked(),isMetal);
 				return true;
 			}
 		});
