@@ -60,7 +60,7 @@ public class settings extends PreferenceActivity {
 		
 		
 		if (!LSystem.checkInitFolder()){
-			Toast.makeText(this, "Can't make init.d folder, your system must be rooted", 2000);
+			Toast.makeText(this, "Can't make init.d folder, your system must be rooted", 2000).show();
 			this.finish(); //Exit app
 		}		
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -110,7 +110,7 @@ public class settings extends PreferenceActivity {
 							LSystem.RemountROnly();
 							Toast.makeText(context, "Haptic set on " + Boolean.toString(hf.isChecked()), 1500).show();
 						} else {
-							Toast.makeText(context, "Error: unable to mount partition", 2000);
+							Toast.makeText(context, "Error: unable to mount partition", 2000).show();
 							hf.setChecked(false);
 						}
 				} else {
@@ -220,7 +220,7 @@ public class settings extends PreferenceActivity {
 						return false;
 					}
 				} else 
-					Toast.makeText(context, "Sorry you need root permissions", 2000);
+					Toast.makeText(context, "Sorry you need root permissions", 2000).show();
 				return false;
 			}
 		});
@@ -242,7 +242,7 @@ public class settings extends PreferenceActivity {
 						return false;
 					}
 				}else {
-						Toast.makeText(context, "Sorry, you need ROOT permissions", 2000);
+						Toast.makeText(context, "Sorry, you need ROOT permissions", 2000).show();
 						return false;
 				}	
 			}
@@ -251,10 +251,10 @@ public class settings extends PreferenceActivity {
 		fixled.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			public boolean onPreferenceClick(Preference preference) {
-			if (fixled.isChecked()) {						
+			if (fixled.isChecked()) {
+				Toast.makeText(context, "ScreenOn on new sms is required",2000).show();
 	        	Intent smsledservice = new Intent(getBaseContext(), SmsLED_service.class);
 	        	getBaseContext().startService(smsledservice);
-	        	Toast.makeText(context, "ScreenOn on new sms is required",2000);
 				}
 			return true;
 			}
@@ -265,6 +265,7 @@ public class settings extends PreferenceActivity {
 	
 	private void updateValues() {
 		editNoise.setSummary("noise is set to " + noiseValue);
+		editSensitivity.setSummary("sensitivity is set to " + sensitivityValue);
 	}
 	
 }
