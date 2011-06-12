@@ -64,7 +64,7 @@ public class Strings {
 	            "\"#!/system/bin/sh",
 	            "#script created by liquid custom settings",
 	            "#",
-	            "echo '0' > /sys/class/leds2/power",
+	            "echo 0 > /sys/class/leds2/power",
 	            "chmod 000 /sys/class/leds2/power\""
 	        );
 	}	

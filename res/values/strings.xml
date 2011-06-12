@@ -2,7 +2,7 @@
 <resources>
 <string name="description">LS app allow you to edit liquid\'s settings.</string>
 <string name="app_name">Liquid settings</string>
-<string name="app_vname">1.4 CM7</string>  
+<string name="app_vname">1.4.1 CM7</string>  
 <string name="vibrON">Haptic Feedback ON</string>
 <string name="vibrOFF">Haptic Feedback OFF</string>
 <string name="sens">sensitivity</string>
