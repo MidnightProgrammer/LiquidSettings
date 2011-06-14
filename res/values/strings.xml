@@ -2,7 +2,7 @@
 <resources>
 <string name="description">LS app allow you to edit liquid\'s settings.</string>
 <string name="app_name">Liquid settings</string>
-<string name="app_vname">1.4.1 CM7</string>  
+<string name="app_vname">1.5 CM7</string>  
 <string name="vibrON">Haptic Feedback ON</string>
 <string name="vibrOFF">Haptic Feedback OFF</string>
 <string name="sens">sensitivity</string>
@@ -16,7 +16,7 @@
 <string name="haptic_help">Haptic feedback is the vibrate feedback issued by pressing the softkeys.</string>
 <string name="sdcache_help">SD Cache improves the speed of your SD card. The value must be between 128 and 4096. Reccomended value: 2048.</string>
 <string name="disablebattery_help">Disable battery led when a USB cable is connected. When unchecked remove and reinsert USB cable to enable battery led.</string>
-<string name="fixsmscall_help">Try to fix sms + call leds blinking together (service: drain a little more battery than normal).</string>
+<string name="fixsmscall_help">Required to fix sms and call LEDs (service: drain a little more battery than normal).</string>
 <string name="softkeynotification_help">Use softkey led as new sms notification led (service: drain more battery than normal).</string>
 </resources>
 

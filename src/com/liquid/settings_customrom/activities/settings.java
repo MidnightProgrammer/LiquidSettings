@@ -15,9 +15,11 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.provider.CallLog.Calls;
 import android.util.Log;
 import android.widget.Toast;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -64,6 +66,16 @@ public class settings extends PreferenceActivity {
 			this.finish(); //Exit app
 		}		
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	
+    	if(prefs.getBoolean("firststart", true)){
+    		Editor editor = prefs.edit();
+    		editor.putBoolean("firststart", false);
+    		editor.putBoolean("fixled", true);
+    		editor.putBoolean("fixsms", true);
+    		editor.putBoolean("fixcall", true);
+    		editor.commit();
+    	}
+    	
     	if(prefs.getBoolean("fixled", false)){                
         	Intent smsledservice = new Intent(this, SmsLED_service.class);
         	this.startService(smsledservice);
@@ -98,7 +110,7 @@ public class settings extends PreferenceActivity {
 		sensitivityValue = editSensitivity.getText();
         
         updateValues();
-
+        
 		hf.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
@@ -252,7 +264,6 @@ public class settings extends PreferenceActivity {
 			
 			public boolean onPreferenceClick(Preference preference) {
 			if (fixled.isChecked()) {
-				Toast.makeText(context, "ScreenOn on new sms is required",2000).show();
 	        	Intent smsledservice = new Intent(getBaseContext(), SmsLED_service.class);
 	        	getBaseContext().startService(smsledservice);
 				}
