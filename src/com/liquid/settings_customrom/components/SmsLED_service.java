@@ -24,7 +24,6 @@ import android.telephony.TelephonyManager;
 public class SmsLED_service extends Service {
 	SmsManager sms;
 	private final Handler mHandler = new Handler();
-	private final Handler mHandler2 = new Handler();
 	private SharedPreferences prefs;
 	
 	private String[] strFields = { 
@@ -35,10 +34,11 @@ public class SmsLED_service extends Service {
     		
     BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
 
-        public void onReceive(Context context, Intent intent) {        	
-        	if(!prefs.getBoolean("fixled", false)){                
+        public void onReceive(Context context, Intent intent) {
+
+        	if(prefs.getBoolean("fixled", false)){                
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {            	
-            	
+
             		if(prefs.getBoolean("fixsms", false)){
      				Cursor cursor = getContentResolver().query(Uri.parse("content://sms/")
                         , new String[]{"read",}
@@ -83,22 +83,17 @@ public class SmsLED_service extends Service {
             	if(prefs.getBoolean("bottomled", false))LiquidSettings.runRootCommand("echo 0 > /sys/class/leds2/bottom");
             	if(prefs.getBoolean("fixcall", false))LiquidSettings.runRootCommand("echo 0 > /sys/class/leds2/call");
             	if(prefs.getBoolean("fixsms", false))LiquidSettings.runRootCommand("echo 0 > /sys/class/leds2/mail");
+            } 
+            if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
+            	if(!prefs.getBoolean("fixsms", false))return;
+            	if(!prefs.getBoolean("bottomled", false))return;             
+                LiquidSettings.runRootCommand("echo 1 > /sys/class/leds2/bottom");
             }
         	}else{
         		terminaservizio();
         		unregisterReceiver(this);
         	}
             
-        }
-    };
-    
-    BroadcastReceiver mIntentReceiver2 = new BroadcastReceiver() {
-
-        public void onReceive(Context context, Intent intent) {
-        	if(!prefs.getBoolean("fixled", false)){terminaservizio();unregisterReceiver(this);return;}
-        	if(!prefs.getBoolean("fixsms", false))return;
-        	if(!prefs.getBoolean("bottomled", false))return;                       
-            LiquidSettings.runRootCommand("echo 1 > /sys/class/leds2/bottom");
         }
     };
     
@@ -117,15 +112,22 @@ public class SmsLED_service extends Service {
 		IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
         this.registerReceiver(mIntentReceiver, filter, null, mHandler);
-        IntentFilter filter2 = new IntentFilter();
-        filter2.addAction("android.provider.Telephony.SMS_RECEIVED");
-        this.registerReceiver(mIntentReceiver2, filter2, null, mHandler2); 
-                	                   	            
+
 	}
 	public void terminaservizio(){
 		LiquidSettings.runRootCommand("echo '0' > /sys/class/leds2/bottom");
 		this.stopSelf();
 	}
-	
+	public void onDesotry(){
+
+		try {
+			this.unregisterReceiver(mIntentReceiver);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 }
