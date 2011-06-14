@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
@@ -57,9 +58,9 @@ public class SmsLED_service extends Service {
                			}
                		}               		
                		cursor.close();
+            		}else{
+               		LiquidSettings.runRootCommand("tail /data/system/mail_led > /sys/class/leds2/bottom");
             		}
-               		
-            		//LiquidSettings.runRootCommand("tail /data/system/mail_led > /sys/class/leds2/bottom");
             		
                		//CHIMATE
                		if(prefs.getBoolean("fixcall", false)){
@@ -85,9 +86,11 @@ public class SmsLED_service extends Service {
             	if(prefs.getBoolean("fixsms", false))LiquidSettings.runRootCommand("echo 0 > /sys/class/leds2/mail");
             } 
             if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
-            	if(!prefs.getBoolean("fixsms", false))return;
-            	if(!prefs.getBoolean("bottomled", false))return;             
-                LiquidSettings.runRootCommand("echo 1 > /sys/class/leds2/bottom");
+            	if(prefs.getBoolean("fixsms", false)){
+            		if(prefs.getBoolean("bottomled", false)) LiquidSettings.runRootCommand("echo 1 > /sys/class/leds2/bottom");
+            	}else{
+            		if(prefs.getBoolean("bottomled", false)) LiquidSettings.runRootCommand("tail /data/system/mail_led > /sys/class/leds2/bottom");
+            	}
             }
         	}else{
         		terminaservizio();
@@ -106,7 +109,7 @@ public class SmsLED_service extends Service {
 	}
 	public void onCreate() {
 		super.onCreate();
-		//LiquidSettings.runRootCommand("echo 0 > /data/system/mail_led && chmod 777 /data/system/mail_led"); 
+		LiquidSettings.runRootCommand("echo 0 > /data/system/mail_led && chmod 777 /data/system/mail_led"); 
     	prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	if(!prefs.getBoolean("fixled", false)){terminaservizio();return;}
 		IntentFilter filter = new IntentFilter();
@@ -114,7 +117,6 @@ public class SmsLED_service extends Service {
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction("android.provider.Telephony.SMS_RECEIVED");
         this.registerReceiver(mIntentReceiver, filter, null, mHandler);
-
 	}
 	public void terminaservizio(){
 		LiquidSettings.runRootCommand("echo '0' > /sys/class/leds2/bottom");

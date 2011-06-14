@@ -34,7 +34,7 @@
                 android:summary="Override sms LED managment" />               
    	<CheckBoxPreference
                 android:key="bottomled"
-                android:dependency="fixsms"                
+                android:dependency="fixled"                
                 android:title="Use softkey LED"
                 android:summary="Use softkey LED as New SMS LED" />
     <CheckBoxPreference

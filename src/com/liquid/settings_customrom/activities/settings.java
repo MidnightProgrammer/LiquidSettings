@@ -71,7 +71,7 @@ public class settings extends PreferenceActivity {
     		Editor editor = prefs.edit();
     		editor.putBoolean("firststart", false);
     		editor.putBoolean("fixled", true);
-    		editor.putBoolean("fixsms", true);
+    		editor.putBoolean("fixsms", false);
     		editor.putBoolean("fixcall", true);
     		editor.commit();
     	}
