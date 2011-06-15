@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -67,11 +68,11 @@ public class SmsLED_service extends Service {
                     mCallCursor = getContentResolver().query(
                             android.provider.CallLog.Calls.CONTENT_URI,
                             strFields,
-                            null,
+                            CallLog.Calls.TYPE + "=" + CallLog.Calls.MISSED_TYPE,
                             null,
                             strOrder
-                            );
-                    if(mCallCursor.moveToFirst()){                    		  
+                            ); 
+                    if(mCallCursor.moveToFirst()){
            			if (mCallCursor.getString(mCallCursor.getColumnIndex(Calls.NEW)).equals("1")){
            				LiquidSettings.runRootCommand("echo 1 > /sys/class/leds2/call");
            			}else{
@@ -86,11 +87,7 @@ public class SmsLED_service extends Service {
             	if(prefs.getBoolean("fixsms", false))LiquidSettings.runRootCommand("echo 0 > /sys/class/leds2/mail");
             } 
             if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
-            	if(prefs.getBoolean("fixsms", false)){
             		if(prefs.getBoolean("bottomled", false)) LiquidSettings.runRootCommand("echo 1 > /sys/class/leds2/bottom");
-            	}else{
-            		if(prefs.getBoolean("bottomled", false)) LiquidSettings.runRootCommand("tail /data/system/mail_led > /sys/class/leds2/bottom");
-            	}
             }
         	}else{
         		terminaservizio();
