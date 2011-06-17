@@ -6,7 +6,6 @@ import com.liquid.settings_customrom.components.Eula;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -15,12 +14,9 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.provider.CallLog.Calls;
-import android.util.Log;
 import android.widget.Toast;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
-import android.database.Cursor;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -245,6 +241,7 @@ public class settings extends PreferenceActivity {
 						LiquidSettings.runRootCommand("echo '0' > /sys/class/leds2/power");
 						LiquidSettings.runRootCommand("chmod 000 /sys/class/leds2/power");
 					}else{
+						BatteryLED.getBatteryLevel();
 						LiquidSettings.runRootCommand("chmod 222 /sys/class/leds2/power");
 					}
 					if (BatteryLED.setdisable(powerled.isChecked())){						

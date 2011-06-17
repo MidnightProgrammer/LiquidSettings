@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.util.Log;
 
 public class ProxService extends Service {
 	
@@ -16,7 +15,7 @@ public class ProxService extends Service {
 		super.onCreate();
 		context = this;
 		powermanager = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
-		wakelock = this.powermanager.newWakeLock(
+		wakelock = powermanager.newWakeLock(
 		PowerManager.PARTIAL_WAKE_LOCK,
 		"bring phone");
 		wakelock.acquire();
