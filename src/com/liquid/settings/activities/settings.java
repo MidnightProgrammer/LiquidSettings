@@ -79,6 +79,7 @@ public class settings extends PreferenceActivity {
 			editNoise.setEnabled(false);
 			editNoise.setSummary("Noise setting not available for Liquid Metal");
 			editSensitivity.setSummary("set a value between 15 and 30");
+			powerled.setEnabled(false);
 		}
 		if (!LSystem.hapticAvailable())
 			hf.setEnabled(false);
@@ -181,7 +182,7 @@ public class settings extends PreferenceActivity {
 		ads.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
-				if (ROOT && LSystem.RemountRW()) {
+				if (ROOT) {
 					if(!ads.isChecked()) {
 						if (Adsfilter.isFiltered()){
 							if (Adsfilter.restoreHostsFile()) {
@@ -199,7 +200,6 @@ public class settings extends PreferenceActivity {
 							ads.setChecked(false);
 						}
 					}
-					LSystem.RemountROnly();
 				} else {
 					Toast.makeText(context, "Sorry, you need ROOT permissions.", 2000).show();
 					ads.setChecked(false);
@@ -314,14 +314,14 @@ public class settings extends PreferenceActivity {
 		
 		powerled.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
-				BatteryLED.getBatteryLevel(isMetal);
 				if (powerled.isChecked()) {
-						LiquidSettings.runRootCommand("echo '0' > " + ( isMetal ? "/sys/class/leds/power" : "/sys/class/leds2/power"));
-						LiquidSettings.runRootCommand("chmod 000 "  + ( isMetal ? "/sys/class/leds/power" : "/sys/class/leds2/power"));
-					}else{						
-						LiquidSettings.runRootCommand("chmod 222 " + (isMetal ? "/sys/class/leds/power" : "/sys/class/leds2/power"));
+						LiquidSettings.runRootCommand("echo '0' > " + "/sys/class/leds2/power");
+						LiquidSettings.runRootCommand("chmod 000 "  + "/sys/class/leds2/power");
+					}else{		
+						BatteryLED.getBatteryLevel();
+						LiquidSettings.runRootCommand("/sys/class/leds2/power");
 					}
-				BatteryLED.setdisable(powerled.isChecked(),isMetal);
+				BatteryLED.setdisable(powerled.isChecked());
 				return true;
 			}
 		});

@@ -8,7 +8,7 @@ To use this app you need ROOT permissions. This app will work only on Acer Liqui
 
 <string name="CHANGELOG">
 Changelog v 1.3beta:\n
-[~] New committer: Suxsem\n
-[~] Power led on/off\n
+[~] Power LED on/off
+[~] Fixed ads patch
 </string>
 </resources>

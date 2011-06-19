@@ -1,7 +1,10 @@
 package com.liquid.settings;
 
 import java.io.File;
+import java.io.InputStream;
+
 import android.content.Context;
+import android.util.Log;
 
 public class Adsfilter {
 	
@@ -36,13 +39,26 @@ public class Adsfilter {
 	}
 	
 	public static boolean apply(Context cont){
-		if (LSystem.RemountRW()){
+		InputStream hostInput = cont.getResources().openRawResource(R.raw.hosts);
+		byte [] bytesToWrite = {0x0};
+		try {
+			bytesToWrite = new byte [hostInput.available()];
+			while (hostInput.read(bytesToWrite) != -1){}
+		}catch (Exception e){
+			Log.e("LS-APP",e.getMessage());
+			return false;
+		}
+		if (LSystem.RemountROnly()){
 			backupHostsFile();
-			if (LiquidSettings.runRootCommand("echo $(cat /system/etc/hosts)'" + 
-					(cont.getResources().getString(R.string.hosts))  + "' > /system/etc/hosts") 
-					&& LiquidSettings.runRootCommand("chmod 644 /system/etc/hosts")
-					&& LSystem.RemountROnly())
-				return true;	
+			LSystem.RemountRW();
+			try {
+				LiquidSettings.runRootCommand("echo '" + new String(bytesToWrite) + "' > /system/etc/hosts");
+			} catch (Exception e) {
+				Log.e("LS-APP", e.getMessage());
+				return false;
+			}
+			LSystem.RemountROnly();
+			return true;
 		}
 		return false;
 	}
